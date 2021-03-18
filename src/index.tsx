@@ -1,15 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './components/app/App';
+import App from './components/App/App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Home } from './components/Home/Home'
+import { Teacher } from './components/Teacher/Teacher';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Route exact path="/"> <Home/> </Route>
+      <Route exact path="/teacher"> <Teacher/> </Route>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
