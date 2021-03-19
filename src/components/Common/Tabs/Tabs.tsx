@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
@@ -23,11 +23,18 @@ const useStyles = makeStyles({
   },
 });
 
-type AppProps = { RegisterAttendance: React.FC, AttendeeStatistics: React.FC };
+interface IComponent{
+  component: React.ReactNode, 
+  label: string
+}
 
-export default function CenteredTabs({ RegisterAttendance, AttendeeStatistics }: AppProps) {
+type Props = {
+  components: IComponent[]
+}
+
+export default function CenteredTabs({ components }: Props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -43,12 +50,11 @@ export default function CenteredTabs({ RegisterAttendance, AttendeeStatistics }:
           textColor="primary"
           centered
         >
-          <Tab label="Register Student Attendance" className={classes.tabs}/>
-          <Tab label="View Attendee Statistics" className={classes.tabs}/>
+          {components.map(item => <Tab label={item.label} className={classes.tabs}/>)}
         </Tabs>
       </Paper>
       <Paper className={classes.paper}>
-        { value === 0 ? <RegisterAttendance/> : <AttendeeStatistics/> }
+        {components[value].component}
       </Paper>      
     </>
   );

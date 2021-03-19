@@ -1,6 +1,6 @@
 import { Paper } from '@material-ui/core';
 import React, { useState } from 'react';
-import ToggleSwitch from '../../Common/Switch/Switch';
+import ToggleSwitch from '../../Common/ToggleSwitch/ToggleSwitch';
 import './RegisterAttendance.css'
 
 export const RegisterAttendance = () => {
