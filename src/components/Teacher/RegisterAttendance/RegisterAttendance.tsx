@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
-import ToggleSwitch from '../../Common/ToggleSwitch/ToggleSwitch';
+import React from 'react';
+import VerticalStepper from '../../Common/VerticalStepper/VerticalStepper'
+import CoursesAndClasses from './CoursesAndClasses/CoursesAndClasses';
+import GenerateCode from './GenerateCode/GenerateCode';
 import './RegisterAttendance.css'
 
 export const RegisterAttendance = () => {
-    const [hasEnabledGPS, setHasEnabledGPS] = useState<boolean>(false);
-
     return (
         <>
-            <ToggleSwitch 
-                condition={hasEnabledGPS}
-                setCondition={setHasEnabledGPS}
-                names="EnableLocation"
-                label="Enable Location Services"
-                />
-            <div style={{height: '250px', marginTop: '10px'}}></div>
+            <VerticalStepper>
+                <CoursesAndClasses />
+                <GenerateCode />
+                {/*
+                The geolocation component
+                Possibly with this toggleswitch
+                    <ToggleSwitch 
+                        condition={hasEnabledGPS}
+                        setCondition={setHasEnabledGPS}
+                        names="EnableLocation"
+                        label="Enable Location Services"
+                    />
+                */}
+            </VerticalStepper>
         </>
     );
 }
