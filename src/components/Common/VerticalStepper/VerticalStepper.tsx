@@ -45,7 +45,7 @@ function getStepContent(stepIndex: number, children: React.ReactNode[]) {
     case 0:
       return getChildComponent(children, "CoursesAndClasses");
     case 1:
-      return <h1>Hey from GeoLocation component</h1> //getChildComponent(children, "GeoLocation");
+      return getChildComponent(children, "Map");
     case 2:
       return getChildComponent(children, "GenerateCode");
     default:
