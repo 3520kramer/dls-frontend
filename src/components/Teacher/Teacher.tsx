@@ -1,7 +1,7 @@
 import React from 'react';
 import Tabs from '../Common/Tabs/Tabs';
 import './Teacherstyles.css'
-import { RegisterAttendance } from './RegisterAttendance/RegisterAttendance';
+import { RegisterAttendance } from './RegisterAttendance/RegisterAttendance'
 import { AttendeeStatistics } from './AttendeeStatistics/AttendeeStatistics';
 
 export const Teacher = () => {
