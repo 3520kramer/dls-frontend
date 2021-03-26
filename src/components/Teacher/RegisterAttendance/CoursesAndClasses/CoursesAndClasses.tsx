@@ -28,6 +28,10 @@ const CoursesAndClasses: React.FC<IProps> = ({children}) => {
             <Container>
             <Row>
                 <Col>
+                    <h4>Pick a course</h4>
+                    <ListView listData={studentClasses}/>
+                </Col>
+                <Col>
                     <ListView listData={studentClasses}/>
                 </Col>
 
