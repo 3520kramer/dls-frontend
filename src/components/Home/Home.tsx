@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Header } from './Header/Header';
+import { Link } from 'react-router-dom';
+import { Header } from '../Common/Header/Header';
 
 export function Home() {
     
@@ -8,9 +9,17 @@ export function Home() {
     const countProps = {count: count, setCount: setCount }
     
     return(
-        <Header
-            { ...countProps }
-        />
-        
+        <>
+            <div style={{textAlign: "center"}}>
+                <h1>Components avaliable for now</h1>
+                <Link to="/teacher">Teacher component</Link>
+            </div>
+
+            {/*             
+            <Header
+                { ...countProps }
+            /> 
+            */}
+        </>
     )
 }

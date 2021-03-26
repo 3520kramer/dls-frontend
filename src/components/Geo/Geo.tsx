@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
 
-class App extends Component {
+class Geo extends Component {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -28,4 +28,4 @@ class App extends Component {
   }
 }
 
-render(<App />, document.getElementById("root"));
+render(<Geo />, document.getElementById("root"));
