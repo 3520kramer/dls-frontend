@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     stepper: {
       minHeight: '500px',
+      padding: '50px 100px'
     },
   }),
 );
@@ -83,7 +84,7 @@ const VerticalStepper: React.FC<IProps> = ({children}) => {
         ) : (
           <div>
             <div className={classes.stepper} >
-            <Typography className={classes.instructions}>{getStepContent(activeStep, children)}</Typography>
+              {getStepContent(activeStep, children)}
             </div>
             <div className={classes.buttons}>
               <Button
