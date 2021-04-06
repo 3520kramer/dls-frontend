@@ -33,30 +33,26 @@ function getSteps() {
   return ['Select Course and Class', 'Enable Location Services?', 'Generate Code!'];
 }
 
-const getChildComponent = (children: React.ReactNode[], componentName: string) => {
-  return React.Children.map(children, (child: any) => {
-    console.log(child.type.displayName)
-    return child.type.displayName === componentName ? child : null
-  })
-}
-
-function getStepContent(stepIndex: number, children: React.ReactNode[]) {
+function getStepContent(stepIndex: number, props: IProps) {
   switch (stepIndex) {
     case 0:
-      return getChildComponent(children, "CoursesAndClasses");
+      return props.CoursesAndClasses;
     case 1:
-      return getChildComponent(children, "Map");
+      return props.Map;
     case 2:
-      return getChildComponent(children, "GenerateCode");
+      return props.GenerateCode;
     default:
       return 'Unknown stepIndex';
   }
 }
-interface IProps{
-  children: React.ReactNode[]
-}
 
-const VerticalStepper: React.FC<IProps> = ({children}) => {
+interface IProps{
+  CoursesAndClasses?: React.ReactNode,
+  GenerateCode?: React.ReactNode,
+  Map?: React.ReactNode,}
+
+
+const VerticalStepper: React.FC<IProps> = (props: IProps) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
@@ -84,7 +80,7 @@ const VerticalStepper: React.FC<IProps> = ({children}) => {
         ) : (
           <div>
             <div className={classes.stepper} >
-              {getStepContent(activeStep, children)}
+              {getStepContent(activeStep, props)}
             </div>
             <div className={classes.buttons}>
               <Button

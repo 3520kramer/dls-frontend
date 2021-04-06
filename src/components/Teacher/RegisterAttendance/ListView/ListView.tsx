@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import Divider from '@material-ui/core/Divider';
 import { Paper } from '@material-ui/core';
-import { IStudentClass } from '../CoursesAndClasses/CoursesAndClasses';
+import { ICourse } from '../../../../services/CoursesAndClassesService';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -16,6 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: 200,
       backgroundColor: theme.palette.background.paper,
       maxHeight: 320, 
+      minHeight: 320,
       overflow: 'auto',
       margin: 'auto',
     },
@@ -31,20 +31,25 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IProps{
     children?: React.ReactNode[],
-    listData: IStudentClass[]
+    listData: ICourse[],
+    onChange: Function,
 }
   
-const ListView: React.FC<IProps> = ({children, listData}) => {
+const ListView: React.FC<IProps> = ({children, listData, onChange}) => {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
   
-
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number,
   ) => {
     setSelectedIndex(index);
   };
+
+  useEffect(() => {
+    console.log("selected")
+    onChange(listData[selectedIndex])
+  }, [selectedIndex])
 
   return (
     <Paper className={classes.root} variant="outlined" >
@@ -59,24 +64,21 @@ const ListView: React.FC<IProps> = ({children, listData}) => {
         }   
         */
       >
-        {listData.map((studentClass, index) => {
+        {listData.map((item, index) => {
           return (
             <ListItem
               button
+              key={index}
               selected={selectedIndex === index}
               onClick={(event) => handleListItemClick(event, index)}
             >
-              <ListItemText primary={studentClass.title}/>
+              <ListItemText primary={item.title}/>
             </ListItem>
             )
           }
         )}
-        {/* <Divider /> */}
       </List>
     </Paper>
   );
 }
-
-
-ListView.displayName = "CoursesAndClasses"
 export default ListView;
