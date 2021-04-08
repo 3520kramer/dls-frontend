@@ -33,18 +33,24 @@ interface IProps{
 
 const CheckedListView: React.FC<IProps> = ({children, listData, onChange}) => {
   const classes = useStyles();
-  const [checked, setChecked] = useState([-1]);
+  const [checked, setChecked] = useState([-1]); // initialize as -1 to leave list unchecked
 
+  // When the user toggles a class in the list, then the 
+  // checked state will change and we will need to update the parent component
   useEffect(() => {
-    let classes: IStudentClass[] = [];
-    checked.forEach(checkedIndex => classes.push(listData[checkedIndex]));
-    onChange(classes);
+    if(listData.length >= 1){
+      // Uses filter to remove the -1 as it is not an index
+      let indexes = checked.filter(index => index !== -1)
+      onChange(indexes);
+    }
   }, [checked])
 
+  // When a new course is chosen listData will change and we will reset the checked list
   useEffect(() => {
     setChecked([-1])
   },[listData]);
 
+  // Handles toggling of classes in list
   const handleToggle = (value: number) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];

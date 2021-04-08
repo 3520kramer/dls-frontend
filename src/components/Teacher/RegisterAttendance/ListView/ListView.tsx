@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -37,7 +37,7 @@ interface IProps{
   
 const ListView: React.FC<IProps> = ({children, listData, onChange}) => {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0); // initialize as 0 to have first item as default selected
   
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -46,9 +46,9 @@ const ListView: React.FC<IProps> = ({children, listData, onChange}) => {
     setSelectedIndex(index);
   };
 
+  // When the user chooses a new item in list we will update the parent
   useEffect(() => {
-    console.log("selected")
-    onChange(listData[selectedIndex])
+    if (listData.length >= 1) onChange(selectedIndex)
   }, [selectedIndex])
 
   return (

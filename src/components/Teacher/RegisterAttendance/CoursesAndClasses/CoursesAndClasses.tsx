@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { getCoursesByTeacherId, getStudentClasses, ICourse, IStudentClass } from '../../../../services/CoursesAndClassesService';
+import { ICourse, IStudentClass } from '../../../../services/CoursesAndClassesService';
 import CheckedListView from '../CheckedListView/CheckedListView';
 import ListView from '../ListView/ListView';
 
@@ -8,43 +8,21 @@ interface IProps{
     children?: React.ReactNode,
     onCoursesChange: Function,
     onClassesChange: Function,
-    selectedCourse: ICourse,
+    courses: ICourse[]
+    studentClasses: IStudentClass[]
 };
 
-const CoursesAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClassesChange, selectedCourse}) => {
-    const [courses, setCourses] = useState<ICourse[] | []>([]);
-    const [studentClasses, setStudentClasses] = useState<IStudentClass[] | []>([]);
-
-    useEffect(() => {
-        getCoursesByTeacherId(1).then(data => {
-            setCourses(data)
-            onCoursesChange(data[0])
-        });
-    },[])
-
-    useEffect(() => {
-        if (selectedCourse) 
-            getStudentClasses(selectedCourse.id, 1).then(classes => setStudentClasses(classes));
-    }, [selectedCourse])
-
-    useEffect(() => {
-        console.log(courses)
-    },[courses])
-
-    useEffect(() => {
-        console.log(studentClasses)
-    },[studentClasses])
-
+const CoursesAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClassesChange, courses, studentClasses}) => {
     return (
         <Container>
             <Row>
                 <Col>
                     <h4 style={{textAlign: 'center'}}>Pick a course</h4>
-                    <ListView listData={courses} onChange={(sc: ICourse) => onCoursesChange(sc)}/>
+                    <ListView listData={courses} onChange={onCoursesChange}/>
                 </Col>
                 <Col>
                     <h4 style={{textAlign: 'center'}}>Select one or more classes</h4>
-                    <CheckedListView listData={studentClasses} onChange={(sc: IStudentClass[]) => onClassesChange(sc)}/>
+                    <CheckedListView listData={studentClasses} onChange={onClassesChange}/> 
                 </Col>
                 <Col>
                     <h4 style={{textAlign: 'center'}}>Choose number of lectures</h4>
