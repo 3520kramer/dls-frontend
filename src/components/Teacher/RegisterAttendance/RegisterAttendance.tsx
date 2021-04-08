@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import VerticalStepper from '../../Common/VerticalStepper/VerticalStepper'
 import CoursesAndClasses from './CoursesAndClasses/CoursesAndClasses';
 import GenerateCode from './GenerateCode/GenerateCode';
-import Map from '../../Common/Map/Map'
 import './RegisterAttendance.css'
-import { ICoordinates } from '../../../services/GeoService';
 import { ICourse, IStudentClass, getCoursesByTeacherId, getStudentClasses } from '../../../services/CoursesAndClassesService';
+import Geo from './Geo/Geo';
+
 
 export const RegisterAttendance = () => {
     const [courses, setCourses] = useState<ICourse[] | []>([]);
@@ -14,12 +14,9 @@ export const RegisterAttendance = () => {
     const [studentClasses, setStudentClasses] = useState<IStudentClass[] | []>([]);
     const [selectedStudentClasses, setSelectedStudentClasses] = useState<IStudentClass[] | []>([]);
 
-    const [location, setLocation] = useState<ICoordinates>({latitude: 0, longitude: 0, accuracy: 0});
-
     // When component mounts
     useEffect(() => {
-        getGeoLocation();
-        
+
         // Fetches the courses which will be passed to 
         // the child components CoursesAndClasses and then to ListView
         getCoursesByTeacherId(1).then(data => {
@@ -34,10 +31,6 @@ export const RegisterAttendance = () => {
         if (selectedCourse !== null) 
             getStudentClasses(1, selectedCourse.id).then(classes => setStudentClasses(classes));
     }, [selectedCourse])
-
-    useEffect(() => {
-        console.log('location', location);
-    },[location])
 
     useEffect(() => {
         console.log('selectedCourse', selectedCourse);    
@@ -67,22 +60,10 @@ export const RegisterAttendance = () => {
         setSelectedStudentClasses(classes)
     }
 
-    const getGeoLocation = () => {
-        navigator.geolocation.getCurrentPosition( (position) => {
-      
-            const coordinates: ICoordinates = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              accuracy: position.coords.accuracy,
-            }
-            
-            setLocation(coordinates);
-          },
-          (error => {
-            console.error("Error Code = " + error.code + " - " + error.message);
-          }), {enableHighAccuracy: true}
-        );
-    }
+   const handleLocationChange = () => {
+       console.log("gello");
+       
+   }
 
     return (
         <>
@@ -96,17 +77,14 @@ export const RegisterAttendance = () => {
                     /> 
                 }
                 GenerateCode={ <GenerateCode /> }
-                Map={ <Map long={location.longitude} lang={location.latitude}/> }
+                Geo={
+                    <Geo 
+                        onLocationChange={handleLocationChange} 
+                    />
+                }
+                
             />
-            {/*
-            Example of toggleswitch
-                <ToggleSwitch 
-                    condition={hasEnabledGPS}
-                    setCondition={setHasEnabledGPS}
-                    names="EnableLocation"
-                    label="Enable Location Services"
-                />
-            */}
+
         </>
     );
 }

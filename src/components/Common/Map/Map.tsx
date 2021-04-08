@@ -1,22 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
+import "./Map.css"
+
+interface IProps{
+  children?: React.ReactNode,
+  latitude: number
+  longitude: number
+  hasEnabledGPS: boolean
+};
 
 const Marker = ({text}: any) => <div>{text}</div>;
 
 // TODO: needs to figure out how to get local location (lang/long) from Geo 
-const Map = (props: any) => {
-    const [center, setCenter] = useState({lat: props.lang, lng:  props.long});
+const Map: React.FC<IProps> = ({latitude, longitude, hasEnabledGPS}) => {
+    const [center, setCenter] = useState({lat: latitude, lng: longitude});
     const [zoom, setZoom] = useState(17);
+    
+    useEffect(() => {
+      console.log("hasEnabledGPS", hasEnabledGPS);
+    },[hasEnabledGPS])
+
+    useEffect(() => {
+      console.log("center", center);
+    },[center])
+    
     return (
-        <div style={{ height: '100vh', width: '100%' }}>
+        <div className={hasEnabledGPS === false ? "hideMap": ""} style={{ height: '50vh', width: '100%' }} >
         <GoogleMapReact
           bootstrapURLKeys={{ key: 'AIzaSyAhtOogYXuE6fkGl7jrwd7vOQQRFmDh-so' }}
-          defaultCenter={center}
+          center={center}
           defaultZoom={zoom}
         >
           <Marker
-            lat={props.lang}
-            lng={props.long}
+            lat={latitude}
+            lng={longitude}
             text="My Marker"
           />
         </GoogleMapReact>
