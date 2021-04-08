@@ -1,4 +1,4 @@
-export interface Coordinates {
+export interface ICoordinates {
   accuracy: Number
   latitude: Number
   longitude: Number
@@ -9,7 +9,7 @@ export const getGeoLocation = (): any => {
 
     console.log('Geoservice1', position);
 
-      const coordinates: Coordinates = {
+      const coordinates: ICoordinates = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         accuracy: position.coords.accuracy,

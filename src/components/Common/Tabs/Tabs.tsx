@@ -50,7 +50,7 @@ export default function CenteredTabs({ components }: Props) {
           textColor="primary"
           centered
         >
-          {components.map(item => <Tab label={item.label} className={classes.tabs}/>)}
+          {components.map((item, index) => <Tab key={index} label={item.label} className={classes.tabs}/>)}
         </Tabs>
       </Paper>
       <Paper className={classes.paper}>
