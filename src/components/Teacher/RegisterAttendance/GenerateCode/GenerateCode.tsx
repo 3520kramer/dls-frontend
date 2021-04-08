@@ -12,5 +12,4 @@ const GenerateCode: React.FC<IProps> = ({children}) => {
     )
 }
 
-GenerateCode.displayName = "GenerateCode";
 export default GenerateCode;

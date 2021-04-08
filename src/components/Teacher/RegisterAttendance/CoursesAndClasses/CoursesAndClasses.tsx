@@ -1,47 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { getStudentClasses } from '../../../../services/CoursesAndClassesService';
+import { ICourse, IStudentClass } from '../../../../services/CoursesAndClassesService';
 import CheckedListView from '../CheckedListView/CheckedListView';
 import ListView from '../ListView/ListView';
-export interface IStudentClass{
-    id: number,
-    title: string,
-}
+
 interface IProps{
     children?: React.ReactNode,
+    onCoursesChange: Function,
+    onClassesChange: Function,
+    courses: ICourse[]
+    studentClasses: IStudentClass[]
 };
 
-const CoursesAndClasses: React.FC<IProps> = ({children}) => {
-   
-    const [studentClasses, setStudentClasses] = useState<IStudentClass[] | []>([]);
-
-    useEffect(() => {
-        getStudentClasses().then((data: IStudentClass[]) => setStudentClasses(data))
-    },[])
-
-    useEffect(() => {
-        console.log(studentClasses)
-    },[studentClasses])
-
+const CoursesAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClassesChange, courses, studentClasses}) => {
     return (
-        <>
-            <Container>
+        <Container>
             <Row>
                 <Col>
-                    <ListView listData={studentClasses}/>
-                </Col>
-
-                <Col>
-                    <p style={{textAlign: 'center'}}>Show courses</p>
+                    <h4 style={{textAlign: 'center'}}>Pick a course</h4>
+                    <ListView listData={courses} onChange={onCoursesChange}/>
                 </Col>
                 <Col>
-                    <CheckedListView listData=""/>
+                    <h4 style={{textAlign: 'center'}}>Select one or more classes</h4>
+                    <CheckedListView listData={studentClasses} onChange={onClassesChange}/> 
+                </Col>
+                <Col>
+                    <h4 style={{textAlign: 'center'}}>Choose number of lectures</h4>
                 </Col>
             </Row>
-            </Container>
-        </>
+        </Container>
     )
 }
-
-CoursesAndClasses.displayName = "CoursesAndClasses"
 export default CoursesAndClasses;
