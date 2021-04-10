@@ -75,3 +75,41 @@ export const fetchedModules = [
     { id: 7, timespan: "14:00 - 14:45" },
     { id: 8, timespan: "14:45 - 15:30" }
 ]
+
+export interface IRegisterAttendanceDTO{
+    course: ICourse,
+    classes: IStudentClass[],
+    modules: IModule[],
+    //geo: ...,
+    codeDuration: number,
+}
+
+export const sendRegisterAttendanceInfo = async (course: ICourse, classes: IStudentClass[], //geo: ...,
+    codeDuration: number, selectedModules: IModule[]) => {
+    
+    // Mocked endpoint
+    let url = new URL("https://run.mocky.io/v3/befbe4b9-a13b-4ca0-ac81-bde2a309d331");
+
+    // Creating the body of the request
+    let registerAttendanceDTO: IRegisterAttendanceDTO = {
+        course: course,
+        classes: classes,
+        modules: selectedModules,
+        codeDuration: codeDuration,
+    }
+
+    console.log("registerAttendanceDTO", registerAttendanceDTO)
+
+    // Sending our newly created DTO to the backend
+    const response = await fetch(url.href, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(registerAttendanceDTO)
+      });
+      //response.json().then(data => console.log(data))
+    // Get the attendence code as a repsonse
+    return await response.json();
+}
