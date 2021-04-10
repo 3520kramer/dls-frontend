@@ -1,3 +1,5 @@
+import { ICoordinates } from "./GeoService";
+
 export interface  IStudentClass{
     id: number,
     title: string,
@@ -76,26 +78,40 @@ export const fetchedModules = [
     { id: 8, timespan: "14:45 - 15:30" }
 ]
 
+export interface IAttendanceCodeDuration{
+    durationMinutes: number,
+    timeStamp: Date
+}
+
+export interface IAttendanceCodeDurationDTO{
+    durationMinutes: number,
+    timeStamp: string
+}
+
 export interface IRegisterAttendanceDTO{
     course: ICourse,
     classes: IStudentClass[],
     modules: IModule[],
-    //geo: ...,
-    codeDuration: number,
+    geo: ICoordinates,
+    duration: IAttendanceCodeDurationDTO,
 }
 
-export const sendRegisterAttendanceInfo = async (course: ICourse, classes: IStudentClass[], //geo: ...,
-    codeDuration: number, selectedModules: IModule[]) => {
+export const sendRegisterAttendanceInfo = async (course: ICourse, classes: IStudentClass[],
+    selectedModules: IModule[], geo: ICoordinates, attendanceCodeDuration: IAttendanceCodeDuration, ) => {
     
     // Mocked endpoint
-    let url = new URL("https://run.mocky.io/v3/befbe4b9-a13b-4ca0-ac81-bde2a309d331");
+    let url = new URL("https://run.mocky.io/v3/9e1d8240-f66f-492f-9ef1-c515d76bc641");
 
     // Creating the body of the request
     let registerAttendanceDTO: IRegisterAttendanceDTO = {
         course: course,
         classes: classes,
         modules: selectedModules,
-        codeDuration: codeDuration,
+        geo: geo,
+        duration: { // converts attendanceCodeDuration to DTO
+            durationMinutes: attendanceCodeDuration.durationMinutes, 
+            timeStamp: attendanceCodeDuration.timeStamp.toISOString()
+        },
     }
 
     console.log("registerAttendanceDTO", registerAttendanceDTO)
@@ -110,6 +126,14 @@ export const sendRegisterAttendanceInfo = async (course: ICourse, classes: IStud
         body: JSON.stringify(registerAttendanceDTO)
       });
       //response.json().then(data => console.log(data))
-    // Get the attendence code as a repsonse
+    // Get the attendance code as a repsonse
     return await response.json();
+}
+
+// response from api
+export interface IAttendanceCodeResponse{
+    id: string,
+    attendanceCode: string,
+    timestamp: Date,
+    duration: number, // minutes
 }

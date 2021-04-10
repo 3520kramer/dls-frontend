@@ -5,15 +5,7 @@ import GenerateCode from './GenerateCode/GenerateCode';
 import Map from '../../Common/Map/Map'
 import './RegisterAttendance.css'
 import { ICoordinates } from '../../../services/GeoService';
-import { ICourse, IStudentClass, getCoursesByTeacherId, getStudentClasses, IModule, getModules, sendRegisterAttendanceInfo } from '../../../services/RegisterAttendanceService';
-
-export interface IAttendenceCode{
-    id: string,
-    attendanceCode: string,
-    timestamp: Date,
-    duration?: string
-
-}
+import { ICourse, IStudentClass, getCoursesByTeacherId, getStudentClasses, IModule, getModules, sendRegisterAttendanceInfo, IAttendanceCodeDuration, IAttendanceCodeResponse } from '../../../services/RegisterAttendanceService';
 
 export const RegisterAttendance = () => {
     const [courses, setCourses] = useState<ICourse[] | []>([]);
@@ -27,7 +19,8 @@ export const RegisterAttendance = () => {
     const [modules, setModules] = useState<IModule[] | []>([]);
     const [selectedModules, setSelectedModules] = useState<IModule[] | []>([]);
 
-    const [attendenceCode, setAttendenceCode] = useState<IAttendenceCode | null>(null);
+    const [duration, setDuration] = useState<number>(10);
+    const [attendanceCode, setAttendenceCode] = useState<IAttendanceCodeResponse | null>(null);
 
     // When component mounts
     useEffect(() => {
@@ -51,21 +44,6 @@ export const RegisterAttendance = () => {
             getStudentClasses(1, selectedCourse.id).then(classes => setStudentClasses(classes));
     }, [selectedCourse])
 
-    // testing to see if the post request is working
-    useEffect(() => {
-        if(selectedCourse && selectedStudentClasses.length >= 1 && selectedModules.length >= 1 ) {
-            sendRegisterAttendanceInfo(selectedCourse, selectedStudentClasses, 1, selectedModules).then(data => {
-                let date = new Date();
-                console.log("date", date)
-                //var minutes = date.getTim
-                console.log("date test", )
-                let attendenceCode: IAttendenceCode = {id: data.id, attendanceCode: data.attendanceCode, timestamp: date}
-
-                setAttendenceCode(attendenceCode)
-            })
-        }
-    },[selectedModules])
-
     useEffect(() => {
         console.log('location', location);
     },[location])
@@ -83,8 +61,9 @@ export const RegisterAttendance = () => {
     },[selectedModules])
 
     useEffect(() => {
-        console.log('attendenceCode', attendenceCode);
-    },[attendenceCode])
+        console.log('attendanceCode', attendanceCode);
+    },[attendanceCode])
+
     // When the component mounts and call this function it will take data as an argument 
     // as 'courses' state is updated to slow. On all other occasions we will use the local state 
     const handleCourseChange = (index: number, data: ICourse[] | undefined) => {
@@ -134,10 +113,22 @@ export const RegisterAttendance = () => {
         return !selectedCourse || selectedStudentClasses.length === 0 || selectedModules.length === 0
     };
 
+    const handleLastStep = (isLastStep: boolean) => {
+        if(isLastStep && selectedCourse && selectedStudentClasses.length >= 1 && selectedModules.length >= 1 ) {
+            let attendanceCode: IAttendanceCodeDuration = {durationMinutes: duration, timeStamp: new Date()}
+
+            sendRegisterAttendanceInfo(selectedCourse, selectedStudentClasses, selectedModules, location, attendanceCode).then((data: IAttendanceCodeResponse ) => {
+                let attendanceCode: IAttendanceCodeResponse = {id: data.id, attendanceCode: data.attendanceCode, timestamp: new Date(data.timestamp), duration: data.duration}
+                setAttendenceCode(attendanceCode)
+            })
+        }
+    }
+
     return (
         <>
             <VerticalStepper
                 isNextButtonDisabled={hasNotCompletedRegistration()}
+                onLastStep={handleLastStep}
                 CoursesAndClasses={ 
                     <CoursesAndClasses 
                         courses={courses}
@@ -148,7 +139,7 @@ export const RegisterAttendance = () => {
                         onModulesChange={handleModulesChange}
                     /> 
                 }
-                GenerateCode={ <GenerateCode attendenceCode={attendenceCode}/> }
+                GenerateCode={ <GenerateCode attendanceCode={attendanceCode}/> }
                 Map={ <Map long={location.longitude} lang={location.latitude}/> }
             />
             {/*
