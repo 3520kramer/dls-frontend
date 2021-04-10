@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -50,15 +50,21 @@ interface IProps{
   CoursesAndClasses?: React.ReactNode,
   GenerateCode?: React.ReactNode,
   Map?: React.ReactNode,
-  isNextButtonDisabled?: boolean
+  isNextButtonDisabled?: boolean,
+  onLastStep: Function,
 }
 
 
 const VerticalStepper: React.FC<IProps> = (props: IProps) => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState<number>(0);
   const steps = getSteps();
 
+  useEffect(()=> {
+    activeStep === steps.length - 1 ? props.onLastStep(true) : props.onLastStep(false);
+    // eslint-disable-next-line
+  },[activeStep])
+  
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
