@@ -1,33 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import { ListItem, useStyles } from "./ListViewStyles";
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import { Paper } from '@material-ui/core';
-import { ICourse } from '../../../../services/CoursesAndClassesService';
-
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-      maxWidth: 200,
-      backgroundColor: theme.palette.background.paper,
-      maxHeight: 320, 
-      minHeight: 320,
-      overflow: 'auto',
-      margin: 'auto',
-    },
-    paper: {
-      flexGrow: 1,
-      width: '100%',
-    },
-    /* nested: {
-      paddingLeft: theme.spacing(4),
-    }, */
-  }),
-);
+import { ICourse } from '../../../../services/RegisterAttendanceService';
 
 interface IProps{
     children?: React.ReactNode[],
@@ -39,38 +15,23 @@ const ListView: React.FC<IProps> = ({children, listData, onChange}) => {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = useState(0); // initialize as 0 to have first item as default selected
   
-  const handleListItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number,
-  ) => {
-    setSelectedIndex(index);
-  };
-
-  // When the user chooses a new item in list we will update the parent
+  // When the user chooses a new item in list we will update the
   useEffect(() => {
     if (listData.length >= 1) onChange(selectedIndex)
   }, [selectedIndex])
 
+  const handleListItemClick = (index: number) => setSelectedIndex(index);
   return (
     <Paper className={classes.root} variant="outlined" >
-      <List 
-        component="nav" 
-        aria-label="secondary mailbox folder"
-        /*         
-        subheader={
-          <ListSubheader component="div" id="nested-list-subheader">
-            Classes/Courses
-          </ListSubheader>
-        }   
-        */
-      >
+      <List component="nav">
         {listData.map((item, index) => {
           return (
             <ListItem
               button
               key={index}
+              color="primary"
               selected={selectedIndex === index}
-              onClick={(event) => handleListItemClick(event, index)}
+              onClick={() => handleListItemClick(index)}
             >
               <ListItemText primary={item.title}/>
             </ListItem>

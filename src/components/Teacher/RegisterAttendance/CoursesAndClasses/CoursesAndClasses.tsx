@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { ICourse, IStudentClass } from '../../../../services/CoursesAndClassesService';
+import { ICourse, IModule, IStudentClass } from '../../../../services/RegisterAttendanceService';
 import CheckedListView from '../CheckedListView/CheckedListView';
 import ListView from '../ListView/ListView';
 
@@ -8,27 +8,54 @@ interface IProps{
     children?: React.ReactNode,
     onCoursesChange: Function,
     onClassesChange: Function,
-    courses: ICourse[]
-    studentClasses: IStudentClass[]
+    onModulesChange: Function,
+    courses: ICourse[],
+    studentClasses: IStudentClass[],
+    modules: IModule[]
 };
 
-const CoursesAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClassesChange, courses, studentClasses}) => {
+const CoursesAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClassesChange, onModulesChange, courses, studentClasses, modules}) => {
     return (
         <Container>
             <Row>
                 <Col>
-                    <h4 style={{textAlign: 'center'}}>Pick a course</h4>
-                    <ListView listData={courses} onChange={onCoursesChange}/>
+                    <div style={{padding: "0 40px"}}>
+                        <h4 style={{textAlign: 'center', paddingBottom: '20px'}}>Pick one course</h4>
+                    </div>
                 </Col>
                 <Col>
-                    <h4 style={{textAlign: 'center'}}>Select one or more classes</h4>
-                    <CheckedListView listData={studentClasses} onChange={onClassesChange}/> 
+                    <h4 style={{textAlign: 'center', paddingBottom: '20px'}}>Select one or more classes</h4>
                 </Col>
                 <Col>
-                    <h4 style={{textAlign: 'center'}}>Choose number of lectures</h4>
+                    <h4 style={{textAlign: 'center', paddingBottom: '20px'}}>Choose number of lectures</h4>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    { /* Courses */ }
+                    <ListView
+                        listData={courses}
+                        onChange={onCoursesChange}
+                    />
+                </Col>
+                <Col>
+                    { /* Classes */ }
+                    <CheckedListView
+                        listData={studentClasses}
+                        onChange={onClassesChange}
+                    /> 
+                </Col>
+                <Col>
+                    { /* Modules */ }
+                    <CheckedListView
+                        listData={modules}
+                        onChange={onModulesChange} 
+                        allowMultiToggle
+                    /> 
                 </Col>
             </Row>
         </Container>
     )
 }
+
 export default CoursesAndClasses;
