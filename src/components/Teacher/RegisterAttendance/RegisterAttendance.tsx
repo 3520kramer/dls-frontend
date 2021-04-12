@@ -4,7 +4,7 @@ import CoursesAndClasses from './CoursesAndClasses/CoursesAndClasses';
 import GenerateCode from './GenerateCode/GenerateCode';
 import './RegisterAttendance.css'
 import { ICourse, IStudentClass, getCoursesByTeacherId, getStudentClasses } from '../../../services/CoursesAndClassesService';
-import Geo from './Geo/Geo';
+import Geo, { ICoordinates } from './Geo/Geo';
 
 
 export const RegisterAttendance = () => {
@@ -13,6 +13,19 @@ export const RegisterAttendance = () => {
 
     const [studentClasses, setStudentClasses] = useState<IStudentClass[] | []>([]);
     const [selectedStudentClasses, setSelectedStudentClasses] = useState<IStudentClass[] | []>([]);
+    const [selectedNumberOfStudents, setSelectedNumberOfStudents] = useState<number>(0);
+    const [selectedCodeDuration, setCodeDuration] = useState<number>(0);
+    const [selectedLocation, setSelectedLocation] = useState<ICoordinates | ''>('');
+
+
+    useEffect(() => {
+        console.log('selectedCodeDuration', selectedCodeDuration);    
+    },[selectedCodeDuration])
+
+    useEffect(() => {
+        console.log('selectedNumberOfStudents', selectedNumberOfStudents);    
+    },[selectedNumberOfStudents])
+
 
     // When component mounts
     useEffect(() => {
@@ -60,10 +73,23 @@ export const RegisterAttendance = () => {
         setSelectedStudentClasses(classes)
     }
 
-   const handleLocationChange = () => {
-       console.log("gello");
-       
-   }
+    // get the locations data from Geo
+    const handleLocationChange = (coordinates: ICoordinates) => {
+        setSelectedLocation(coordinates);
+        console.log("handleLocationChange", coordinates);
+    }
+
+    // gets the number of students from Geo
+    const handleNumberOfStudentsChange = (value: number) => {        
+        setSelectedNumberOfStudents(value);
+        console.log("handleNumberOfStudentsChange", value);
+    }
+
+    // gets the number of code duration from Geo
+    const handleCodeDurationChange = (value: number) => {        
+        setCodeDuration(value);
+        console.log("handleCodeDurationChange", value);
+    }
 
     return (
         <>
@@ -80,6 +106,10 @@ export const RegisterAttendance = () => {
                 Geo={
                     <Geo 
                         onLocationChange={handleLocationChange} 
+                        onNumberOfStudentsChange={handleNumberOfStudentsChange}
+                        onCodeDurationChange={handleCodeDurationChange}
+                        selectedNumberOfStudents={selectedNumberOfStudents}
+                        selectedCodeDuration={selectedCodeDuration}
                     />
                 }
                 
