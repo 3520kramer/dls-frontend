@@ -1,4 +1,4 @@
-import { ICoordinates } from "./GeoService";
+import { ICoordinates } from "../components/Teacher/RegisterAttendance/Geo/Geoß";
 
 export interface  IStudentClass{
     id: number,
