@@ -47,9 +47,11 @@ function getStepContent(stepIndex: number, props: IProps) {
 }
 
 interface IProps{
-  CoursesAndClasses?: React.ReactNode,
-  GenerateCode?: React.ReactNode,
-  Geo?: React.ReactNode,}
+  CoursesAndClasses: React.ReactNode,
+  GenerateCode: React.ReactNode,
+  Geo: React.ReactNode,
+  isNextButtonDisabled: boolean
+}
 
 
 const VerticalStepper: React.FC<IProps> = (props: IProps) => {
@@ -90,7 +92,7 @@ const VerticalStepper: React.FC<IProps> = (props: IProps) => {
               >
                 Back
               </Button>
-              <Button variant="contained" color="primary" onClick={handleNext}>
+              <Button variant="contained" color="primary" onClick={handleNext} disabled={props.isNextButtonDisabled}>
                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
               </Button>
             </div>
