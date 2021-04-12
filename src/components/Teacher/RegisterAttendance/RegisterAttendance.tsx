@@ -19,7 +19,7 @@ export const RegisterAttendance = () => {
     const [modules, setModules] = useState<IModule[] | []>([]);
     const [selectedModules, setSelectedModules] = useState<IModule[] | []>([]);
 
-    const [duration, setDuration] = useState<number>(10);
+    const [selectedCodeDuration, setCodeDuration] = useState<number>(0);
     const [attendanceCode, setAttendenceCode] = useState<IAttendanceCodeResponse | null>(null);
 
     // When component mounts
@@ -34,7 +34,7 @@ export const RegisterAttendance = () => {
             //setModules(getModules) // TODO: needs to be implemented in getcoursesbyteacherid
         });
             getModules().then(data => setModules(data))
-
+        //eslint-disable-next-line
     },[])
 
     // When a course is selected we will need to fetch the 
@@ -115,7 +115,7 @@ export const RegisterAttendance = () => {
 
     const handleLastStep = (isLastStep: boolean) => {
         if(isLastStep && selectedCourse && selectedStudentClasses.length >= 1 && selectedModules.length >= 1 ) {
-            let attendanceCode: IAttendanceCodeDuration = {durationMinutes: duration, timeStamp: new Date()}
+            let attendanceCode: IAttendanceCodeDuration = {durationMinutes: selectedCodeDuration, timeStamp: new Date()}
 
             sendRegisterAttendanceInfo(selectedCourse, selectedStudentClasses, selectedModules, location, attendanceCode).then((data: IAttendanceCodeResponse ) => {
                 let attendanceCode: IAttendanceCodeResponse = {id: data.id, attendanceCode: data.attendanceCode, timestamp: new Date(data.timestamp), duration: data.duration}
@@ -139,7 +139,7 @@ export const RegisterAttendance = () => {
                         onModulesChange={handleModulesChange}
                     /> 
                 }
-                GenerateCode={ <GenerateCode attendanceCode={attendanceCode}/> }
+                GenerateCode={ attendanceCode !== null && <GenerateCode attendanceCode={attendanceCode}/> }
                 Map={ <Map long={location.longitude} lang={location.latitude}/> }
             />
             {/*

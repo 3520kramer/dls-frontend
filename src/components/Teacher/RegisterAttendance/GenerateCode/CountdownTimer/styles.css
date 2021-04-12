@@ -1,4 +1,4 @@
-.App {
+.time-wrapper {
     display: flex;
     justify-content: space-around;
     font-family: sans-serif;
@@ -6,7 +6,13 @@
     padding-top: 40px;
   }
   
+  .text {
+    text-align: center;
+    font-size: 24px;
+  }
+  
   .time {
+    text-align: center;
     font-size: 32px;
   }
   

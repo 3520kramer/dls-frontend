@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function getSteps() {
-  return ['Select Course and Class', 'Enable Location Services?', 'Generate Code!'];
+  return ['Select subject and class', 'Configure your code', 'Get generated code'];
 }
 
 function getStepContent(stepIndex: number, props: IProps) {
@@ -64,7 +64,7 @@ const VerticalStepper: React.FC<IProps> = (props: IProps) => {
     activeStep === steps.length - 1 ? props.onLastStep(true) : props.onLastStep(false);
     // eslint-disable-next-line
   },[activeStep])
-  
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -83,7 +83,7 @@ const VerticalStepper: React.FC<IProps> = (props: IProps) => {
         {activeStep === steps.length ? (
           <div className={classes.stepper} >
             <Typography className={classes.instructions}>All steps completed</Typography>
-            <Button onClick={handleReset}>Reset</Button>
+            <Button onClick={handleReset}>Create new attendance registration</Button>
           </div>
         ) : (
           <div>

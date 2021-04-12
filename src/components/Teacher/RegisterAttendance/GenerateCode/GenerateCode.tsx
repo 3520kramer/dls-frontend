@@ -2,10 +2,13 @@ import React, { useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { IAttendanceCodeResponse } from '../../../../services/RegisterAttendanceService';
 import CountdownTimer from './CountdownTimer/CountdownTimer';
+import './GenerateCodeStyles.css';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
 
 interface IProps{
     children?: React.ReactNode,
-    attendanceCode: IAttendanceCodeResponse | null,
+    attendanceCode: IAttendanceCodeResponse,
 };
 
 const colors = [
@@ -13,18 +16,23 @@ const colors = [
     ['#F7B801', 0.33],
     ['#A30000', 0.33],
 ]
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      padding: '20px',
+    },
+  }),
+);
 
 const GenerateCode: React.FC<IProps> = ({children, attendanceCode}) => {
+    const classes = useStyles();
 
     useEffect(() => {
         if(attendanceCode !== null){
             console.log("attendanceCode", attendanceCode)
-            // var startDate = attendanceCode.timestamp
-            
-            // // Do your operations -- CALCULATE THE MINUTES AND SECONDS FOR THE CICULAR THINGY
-            // var endDate   = new Date();
-            // var seconds = (endDate.getTime() - startDate.getTime()) / 1000;
-            // console.log(seconds)
         }
     },[attendanceCode])
 
@@ -32,20 +40,24 @@ const GenerateCode: React.FC<IProps> = ({children, attendanceCode}) => {
         <Container>
             <Row>
                 <Col>
-                    <h4 style={{textAlign: 'center'}}>Generate Code</h4>
+                    <h2 style={{textAlign: 'center', marginBottom: '50px'}}>Code to register attendance</h2>
                 </Col>
             </Row>
             <Row>
-                <Col>
-                    <h4 style={{textAlign: 'center'}}>123456</h4>
+                <Col md={{ span: 6, offset: 3 }}>
+                    <div className={classes.root}>
+                        <Paper elevation={3} className="code-wrapper">
+                            <h2 className="code-content">{attendanceCode.attendanceCode}</h2>
+                        </Paper>
+                    </div>
                 </Col>
             </Row>
             <Row>
-                <Col>
-                    <h4 style={{textAlign: 'center'}}>Generate Code</h4>
-                </Col>
-                <Col>
-                    {/* <CountdownTimer duration={attendanceCode.duration} /> */}
+                <Col md={{ span: 6, offset: 3 }}>
+                    <CountdownTimer
+                        timestamp={attendanceCode.timestamp}
+                        duration={attendanceCode.duration}
+                    />
                 </Col>
             </Row>
         </Container>
