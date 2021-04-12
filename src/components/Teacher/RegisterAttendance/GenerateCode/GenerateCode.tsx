@@ -5,6 +5,8 @@ import CountdownTimer from './CountdownTimer/CountdownTimer';
 import './GenerateCodeStyles.css';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 
 interface IProps{
     children?: React.ReactNode,
@@ -24,6 +26,11 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
       padding: '20px',
     },
+    rootButton: {
+        '& > *': {
+          margin: theme.spacing(1),
+        },
+    }
   }),
 );
 
@@ -48,6 +55,14 @@ const GenerateCode: React.FC<IProps> = ({children, attendanceCode}) => {
                     <div className={classes.root}>
                         <Paper elevation={3} className="code-wrapper">
                             <h2 className="code-content">{attendanceCode.attendanceCode}</h2>
+                            <div className={classes.root}>
+                                <IconButton 
+                                    aria-label="FileCopy"
+                                    onClick={() => {navigator.clipboard.writeText(attendanceCode.attendanceCode)}}
+                                >
+                                    <FileCopyOutlinedIcon />
+                                </IconButton>
+                            </div>
                         </Paper>
                     </div>
                 </Col>

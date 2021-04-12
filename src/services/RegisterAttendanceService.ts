@@ -1,4 +1,4 @@
-import { ICoordinates } from "../components/Teacher/RegisterAttendance/Geo/Geoß";
+import { ICoordinates } from "../components/Teacher/RegisterAttendance/Geo/Geo";
 
 export interface  IStudentClass{
     id: number,
@@ -22,7 +22,7 @@ export const getStudentClasses = async (teacher_id: Number, course_id: Number) =
     return await response.json();
 }
 
-export interface ICourse{
+export interface ISubject{
     id: number,
     title: string
 }
@@ -36,7 +36,7 @@ export const getCoursesByTeacherId = async (teacher_id: number) => {
     
     // Need to improve error handling as this API call is essential for registering attendance
     if(!response.ok){
-        let course: ICourse = {id: -1, title: "Error"}
+        let course: ISubject = {id: -1, title: "Error"}
         return [course]
     }
 
@@ -56,7 +56,7 @@ export const getModules = async () => {
     let response = fetchedModules;
     // // Need to improve error handling as this API call is essential for registering attendance
     // if(!response.ok){
-    //     let course: ICourse = {id: -1, title: "Error"}
+    //     let course: ISubject = {id: -1, title: "Error"}
     //     return [course]
     // }
 
@@ -83,31 +83,32 @@ export interface IAttendanceCodeDuration{
     timeStamp: Date
 }
 
-export interface IAttendanceCodeDurationDTO{
-    durationMinutes: number,
-    timeStamp: string
-}
 
 export interface IRegisterAttendanceDTO{
-    course: ICourse,
+    subject: ISubject,
     classes: IStudentClass[],
     modules: IModule[],
-    geo: ICoordinates,
-    duration: IAttendanceCodeDurationDTO,
+    coordinates: { latitude: number, longitude: number } | null
+    duration: { durationMinutes: number, timeStamp: string },
+    numberOfStudents: number | null
 }
 
-export const sendRegisterAttendanceInfo = async (course: ICourse, classes: IStudentClass[],
-    selectedModules: IModule[], geo: ICoordinates, attendanceCodeDuration: IAttendanceCodeDuration, ) => {
+export const sendRegisterAttendanceInfo = async (subject: ISubject, classes: IStudentClass[],
+    selectedModules: IModule[], coordinates: ICoordinates, attendanceCodeDuration: IAttendanceCodeDuration, numberOfStudents: number) => {
     
     // Mocked endpoint
     let url = new URL("https://run.mocky.io/v3/9e1d8240-f66f-492f-9ef1-c515d76bc641");
 
     // Creating the body of the request
     let registerAttendanceDTO: IRegisterAttendanceDTO = {
-        course: course,
+        subject: subject,
         classes: classes,
         modules: selectedModules,
-        geo: geo,
+        coordinates: coordinates.accuracy === 0 && coordinates.latitude === 0 ? null : {
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude
+        },
+        numberOfStudents: coordinates.accuracy !== 0 && coordinates.latitude !== 0 ? null : numberOfStudents,
         duration: { // converts attendanceCodeDuration to DTO
             durationMinutes: attendanceCodeDuration.durationMinutes, 
             timeStamp: attendanceCodeDuration.timeStamp.toISOString()

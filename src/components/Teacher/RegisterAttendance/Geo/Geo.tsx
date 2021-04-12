@@ -7,8 +7,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Container, Col, Row } from 'react-bootstrap';
 
-
-
 // interface that we use to define which props our component can have.
 interface IProps{
     children?: React.ReactNode,
@@ -16,7 +14,8 @@ interface IProps{
     onNumberOfStudentsChange: Function,
     selectedNumberOfStudents: number,
     onCodeDurationChange: Function,
-    selectedCodeDuration: number
+    selectedCodeDuration: number,
+    location: ICoordinates
 };
 
 // interface that holds our coordinates
@@ -27,17 +26,17 @@ export interface ICoordinates {
   }
  
 // functional component that handles the geolocation of the user 
-const Geo: React.FC<IProps> = ({children, onLocationChange, onNumberOfStudentsChange, selectedNumberOfStudents, onCodeDurationChange, selectedCodeDuration}) => {
+const Geo: React.FC<IProps> = ({children, location, onLocationChange, onNumberOfStudentsChange, selectedNumberOfStudents, onCodeDurationChange, selectedCodeDuration}) => {
 
-    const [location, setLocation] = useState<ICoordinates>({latitude: 0, longitude: 0, accuracy: 0});
     const [hasEnabledGPS, setHasEnabledGPS] = useState<boolean>(false);
     const [count, setCount] = useState<number>(1);
-
 
     // When component mounts
     useEffect(() => {
         if(hasEnabledGPS) {
             getGeoLocation();
+        }else{
+            onLocationChange({latitude: 0, longitude: 0, accuracy: 0});
         }
     },[hasEnabledGPS])
 
@@ -78,7 +77,7 @@ const Geo: React.FC<IProps> = ({children, onLocationChange, onNumberOfStudentsCh
               longitude: position.coords.longitude,
               accuracy: position.coords.accuracy,
             }
-            setLocation(coordinates);
+            onLocationChange(coordinates);
           },
           (error => {
             console.error("Error Code = " + error.code + " - " + error.message);
@@ -96,8 +95,11 @@ const Geo: React.FC<IProps> = ({children, onLocationChange, onNumberOfStudentsCh
     const handleCodeDurationChange = (value: number) => {
         console.log("handleTextChange", value);
         onCodeDurationChange(value)
-     }
+    }
 
+    const codeDurationhasError = () => selectedCodeDuration <= 0;
+
+    const numberOfStudentsHasError = () => selectedNumberOfStudents <= 0;
 
     // Returns the view of the funtional component
     return (
@@ -116,13 +118,15 @@ const Geo: React.FC<IProps> = ({children, onLocationChange, onNumberOfStudentsCh
                         label="Number of students"
                         onChange={handleNumberOfStudentsChange}
                         disabled={hasEnabledGPS}
-                        value={selectedNumberOfStudents}   
+                        value={selectedNumberOfStudents} 
+                        showError={numberOfStudentsHasError()} 
                     />
                     <TextField 
                         type="number"
                         label="Code duration in mins"
                         onChange={handleCodeDurationChange}  
                         value={selectedCodeDuration}
+                        showError={codeDurationhasError()}
                     />
 
                 </Col>

@@ -52,6 +52,7 @@ interface IProps{
   Geo: React.ReactNode,
   isNextButtonDisabled: boolean,
   onLastStep: Function,
+  hasReset: Function
 }
 
 
@@ -61,6 +62,7 @@ const VerticalStepper: React.FC<IProps> = (props: IProps) => {
   const steps = getSteps();
 
   useEffect(()=> {
+    console.log("onLastStep", activeStep)
     activeStep === steps.length - 1 ? props.onLastStep(true) : props.onLastStep(false);
     // eslint-disable-next-line
   },[activeStep])
@@ -74,44 +76,36 @@ const VerticalStepper: React.FC<IProps> = (props: IProps) => {
   };
 
   const handleReset = () => {
+    props.hasReset();
     setActiveStep(0);
   };
 
   return (
     <div className={classes.root}>
-      <div>
-        {activeStep === steps.length ? (
-          <div className={classes.stepper} >
-            <Typography className={classes.instructions}>All steps completed</Typography>
-            <Button onClick={handleReset}>Create new attendance registration</Button>
-          </div>
-        ) : (
-          <div>
-            <div className={classes.stepper} >
-              {getStepContent(activeStep, props)}
-            </div>
-            <div className={classes.buttons}>
-              <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                className={classes.backButton}
-              >
-                Back
-              </Button>
-              <Button variant="contained" color="primary" onClick={handleNext} disabled={props.isNextButtonDisabled}>
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-              </Button>
-            </div>
-            <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((label) => (
-                <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
-          </div>
-        )}
+      <div className={classes.stepper} >
+        {getStepContent(activeStep, props)}
       </div>
+      <div className={classes.buttons}>
+        {activeStep !== 2 &&
+          <Button
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            className={classes.backButton}
+          >
+            Back
+          </Button>
+        }
+        <Button variant="contained" color="primary" onClick={activeStep === steps.length - 1 ? handleReset : handleNext} disabled={props.isNextButtonDisabled}>
+          {activeStep === steps.length - 1 ? 'Create new attendance registration' : 'Next'}
+        </Button>
+      </div>
+      <Stepper activeStep={activeStep} alternativeLabel>
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
     </div>
   );
 }

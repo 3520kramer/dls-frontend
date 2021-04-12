@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { ICourse, IModule, IStudentClass } from '../../../../services/RegisterAttendanceService';
+import { ISubject, IModule, IStudentClass } from '../../../../services/RegisterAttendanceService';
 import CheckedListView from '../CheckedListView/CheckedListView';
 import ListView from '../ListView/ListView';
 
@@ -9,7 +9,7 @@ interface IProps{
     onCoursesChange: Function,
     onClassesChange: Function,
     onModulesChange: Function,
-    courses: ICourse[],
+    courses: ISubject[],
     studentClasses: IStudentClass[],
     modules: IModule[]
 };
@@ -31,7 +31,7 @@ const CoursesAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClass
                 </Col>
             </Row>
             <Row>
-                <Col>
+                <Col style={{padding: 0}}>
                     { /* Courses */ }
                     <ListView
                         listData={courses}
