@@ -38,7 +38,7 @@ function getStepContent(stepIndex: number, props: IProps) {
     case 0:
       return props.CoursesAndClasses;
     case 1:
-      return props.Map;
+      return props.Geo;
     case 2:
       return props.GenerateCode;
     default:
@@ -47,10 +47,10 @@ function getStepContent(stepIndex: number, props: IProps) {
 }
 
 interface IProps{
-  CoursesAndClasses?: React.ReactNode,
-  GenerateCode?: React.ReactNode,
-  Map?: React.ReactNode,
-  isNextButtonDisabled?: boolean
+  CoursesAndClasses: React.ReactNode,
+  GenerateCode: React.ReactNode,
+  Geo: React.ReactNode,
+  isNextButtonDisabled: boolean
 }
 
 
