@@ -1,0 +1,30 @@
+[
+    {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@email.com",
+        "classes": ["class1", "class2"],
+        "attendance": [
+            {
+                "date": "2021-02-21T23:00:00.000+00:00",
+                "class": "class1",
+                "attended": "true"
+            }
+        ],
+        "role": "student"
+    },
+    {
+        "firstName": "Jane",
+        "lastName": "Doe",
+        "email": "jane.doe@email.com",
+        "classes": ["class2", "class3"],
+        "attendance": [
+            {
+                "date": "2020-06-17T23:00:00.000+00:00",
+                "class": "class3",
+                "attended": "false"
+            }
+        ],
+        "role": "student"
+    }
+]
