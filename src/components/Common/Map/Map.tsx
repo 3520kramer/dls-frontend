@@ -58,7 +58,7 @@ const Map: React.FC<IProps> = ({latitude, longitude, hasEnabledGPS}) => {
       >
       <div className={hasEnabledGPS === false ? "hideMap": ""} style={{ height: '50vh', width: '100%' }} >
         <GoogleMapReact
-          bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
+          bootstrapURLKeys={{ key: process.env.GOOGLE_API_KEY || GOOGLE_API_KEY }}
           defaultCenter={{lat: 0, lng: 0}}
           center={{lat: latitude, lng: longitude}}
           defaultZoom={zoom}
