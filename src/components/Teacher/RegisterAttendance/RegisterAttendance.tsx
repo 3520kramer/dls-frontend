@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import VerticalStepper from '../../Common/VerticalStepper/VerticalStepper'
-import CoursesAndClasses from './CoursesAndClasses/CoursesAndClasses';
+import SubjectsAndClasses from './SubjectsAndClasses/SubjectsAndClasses';
 import GenerateCode from './GenerateCode/GenerateCode';
 import './RegisterAttendance.css'
 import { ISubject, IStudentClass, getSubjectsByTeacherId, getStudentClasses, IModule, getModules, sendRegisterAttendanceInfo, IAttendanceCodeDuration, IAttendanceCodeResponse } from '../../../services/RegisterAttendanceService';
 import Geo, { ICoordinates } from './Geo/Geo';
 
 export const RegisterAttendance = () => {
-    const [courses, setCourses] = useState<ISubject[] | []>([]);
+    const [subjects, setSubjects] = useState<ISubject[] | []>([]);
     const [selectedCourse, setSelectedCourse] = useState<ISubject | null>(null);
 
     const [studentClasses, setStudentClasses] = useState<IStudentClass[] | []>([]);
@@ -26,11 +26,11 @@ export const RegisterAttendance = () => {
     // When component mounts
     useEffect(() => {
 
-        // Fetches the courses which will be passed to 
-        // the child components CoursesAndClasses and then to ListView
+        // Fetches the subjects which will be passed to 
+        // the child components SubjectsAndClasses and then to ListView
         getSubjectsByTeacherId(1).then(data => {
-            setCourses(data)
-            handleCourseChange(0, data)
+            setSubjects(data)
+            handleSubjectChange(0, data)
             //setModules(getModules) // TODO: needs to be implemented in getSubjectsByTeacherId
         });
             getModules().then(data => setModules(data))
@@ -69,17 +69,17 @@ export const RegisterAttendance = () => {
     },[attendanceCode])
 
     // When the component mounts and call this function it will take data as an argument 
-    // as 'courses' state is updated to slow. On all other occasions we will use the local state 
-    const handleCourseChange = (index: number, data: ISubject[] | undefined) => {
-        let course;
+    // as 'subjects' state is updated to slow. On all other occasions we will use the local state 
+    const handleSubjectChange = (index: number, data: ISubject[] | undefined) => {
+        let subject;
 
         if (data !== undefined){
-            course = data[index];
+            subject = data[index];
         } else {
-            course = courses[index];
+            subject = subjects[index];
         }
 
-        setSelectedCourse(course)
+        setSelectedCourse(subject)
     }
 
     const handleStudentClassesChange = (indexes: number[]) => {        
@@ -154,12 +154,12 @@ export const RegisterAttendance = () => {
                 isNextButtonDisabled={hasNotCompletedRegistration() || selectedCodeDuration <= 0 || selectedNumberOfStudents <= 0}
                 onLastStep={handleLastStep}
                 hasReset={handleHasReset}
-                CoursesAndClasses={ 
-                    <CoursesAndClasses 
-                        courses={courses}
+                SubjectsAndClasses={ 
+                    <SubjectsAndClasses 
+                        subjects={subjects}
                         studentClasses={studentClasses}
                         modules={modules}
-                        onCoursesChange={handleCourseChange}
+                        onCoursesChange={handleSubjectChange}
                         onClassesChange={handleStudentClassesChange}
                         onModulesChange={handleModulesChange}
                     /> 
