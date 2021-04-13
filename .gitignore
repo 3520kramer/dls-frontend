@@ -4,6 +4,7 @@
 launch.json
 
 # config vars
+.env
 ConfigurationVariables.ts
 
 # package-lock

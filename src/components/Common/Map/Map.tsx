@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import "./Map.css"
 import LoadingOverlay from 'react-loading-overlay-ts';
-import { GOOGLE_API_KEY } from '../../../configuration/ConfigurationVariables';
 
 interface IProps{
   children?: React.ReactNode,
@@ -24,10 +23,12 @@ const Marker = (props: any) => {
 
 
 const Map: React.FC<IProps> = ({latitude, longitude, hasEnabledGPS}) => {
-  const [isActive, setActive] = useState(false)
+    const [isActive, setActive] = useState(false)
     const [center, setCenter] = useState({lat: latitude, lng: longitude});
     const [zoom, setZoom] = useState(17);
-
+    
+    const GOOGLE_API_KEY: string = process.env.GOOGLE_API_KEY !== undefined ? process.env.GOOGLE_API_KEY : "";
+    
     // for debugging
     useEffect(() => {
       console.log("hasEnabledGPS", hasEnabledGPS);
@@ -57,7 +58,7 @@ const Map: React.FC<IProps> = ({latitude, longitude, hasEnabledGPS}) => {
       >
       <div className={hasEnabledGPS === false ? "hideMap": ""} style={{ height: '50vh', width: '100%' }} >
         <GoogleMapReact
-          bootstrapURLKeys={{ key: process.env.GOOGLE_API_KEY || GOOGLE_API_KEY }}
+          bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
           defaultCenter={{lat: 0, lng: 0}}
           center={{lat: latitude, lng: longitude}}
           defaultZoom={zoom}
