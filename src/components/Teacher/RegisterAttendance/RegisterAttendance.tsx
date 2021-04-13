@@ -3,7 +3,7 @@ import VerticalStepper from '../../Common/VerticalStepper/VerticalStepper'
 import CoursesAndClasses from './CoursesAndClasses/CoursesAndClasses';
 import GenerateCode from './GenerateCode/GenerateCode';
 import './RegisterAttendance.css'
-import { ISubject, IStudentClass, getCoursesByTeacherId, getStudentClasses, IModule, getModules, sendRegisterAttendanceInfo, IAttendanceCodeDuration, IAttendanceCodeResponse } from '../../../services/RegisterAttendanceService';
+import { ISubject, IStudentClass, getSubjectsByTeacherId, getStudentClasses, IModule, getModules, sendRegisterAttendanceInfo, IAttendanceCodeDuration, IAttendanceCodeResponse } from '../../../services/RegisterAttendanceService';
 import Geo, { ICoordinates } from './Geo/Geo';
 
 export const RegisterAttendance = () => {
@@ -28,10 +28,10 @@ export const RegisterAttendance = () => {
 
         // Fetches the courses which will be passed to 
         // the child components CoursesAndClasses and then to ListView
-        getCoursesByTeacherId(1).then(data => {
+        getSubjectsByTeacherId(1).then(data => {
             setCourses(data)
             handleCourseChange(0, data)
-            //setModules(getModules) // TODO: needs to be implemented in getcoursesbyteacherid
+            //setModules(getModules) // TODO: needs to be implemented in getSubjectsByTeacherId
         });
             getModules().then(data => setModules(data))
         //eslint-disable-next-line

@@ -3,7 +3,10 @@
 # Debugger config in visual studio
 launch.json
 
-# 
+# config vars
+ConfigurationVariables.ts
+
+# package-lock
 package-lock.json
 
 # dependencies

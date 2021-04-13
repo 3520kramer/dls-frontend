@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '../Common/Header/Header';
 
@@ -8,6 +8,9 @@ export function Home() {
 
     const countProps = {count: count, setCount: setCount }
     
+    useEffect(() => {
+        console.log("Env:", process.env);
+    })
     return(
         <>
             <div style={{textAlign: "center"}}>
