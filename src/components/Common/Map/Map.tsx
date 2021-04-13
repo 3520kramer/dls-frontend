@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
 import "./Map.css"
 import LoadingOverlay from 'react-loading-overlay-ts';
+import { GOOGLE_API_KEY } from '../../../configuration/ConfigurationVariables';
 
 interface IProps{
   children?: React.ReactNode,
@@ -56,7 +57,7 @@ const Map: React.FC<IProps> = ({latitude, longitude, hasEnabledGPS}) => {
       >
       <div className={hasEnabledGPS === false ? "hideMap": ""} style={{ height: '50vh', width: '100%' }} >
         <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyAhtOogYXuE6fkGl7jrwd7vOQQRFmDh-so' }}
+          bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
           defaultCenter={{lat: 0, lng: 0}}
           center={{lat: latitude, lng: longitude}}
           defaultZoom={zoom}

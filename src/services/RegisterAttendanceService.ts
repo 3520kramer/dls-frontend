@@ -1,5 +1,6 @@
 import { ICoordinates } from "../components/Teacher/RegisterAttendance/Geo/Geo";
-
+import { COURSES_ROUTE } from "../api-endpoints/endpoints";
+ 
 export interface  IStudentClass{
     id: number,
     title: string,
@@ -27,8 +28,8 @@ export interface ISubject{
     title: string
 }
 
-export const getCoursesByTeacherId = async (teacher_id: number) => {
-    let url = new URL("https://run.mocky.io/v3/3f8459f4-b181-4d9c-8a06-916eb831ea21");
+export const getSubjectsByTeacherId = async (teacher_id: number) => {
+    let url = new URL(COURSES_ROUTE);
     
     url.searchParams.append("teacher_id", teacher_id.toString())
     
