@@ -20,7 +20,7 @@ const CoursesAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClass
             <Row>
                 <Col>
                     <div style={{padding: "0 40px"}}>
-                        <h4 style={{textAlign: 'center', paddingBottom: '20px'}}>Pick one course</h4>
+                        <h4 style={{textAlign: 'center', paddingBottom: '20px'}}>Pick one subject</h4>
                     </div>
                 </Col>
                 <Col>
