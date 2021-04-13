@@ -1,0 +1,10 @@
+.code-wrapper{
+    display: inline-block;
+    text-align: center;
+    align-content: center;
+}
+
+.code-content{
+    text-align: center;
+    padding: 10px 5px 5px 5px;
+}

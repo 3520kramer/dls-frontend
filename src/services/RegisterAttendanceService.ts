@@ -1,3 +1,5 @@
+import { ICoordinates } from "../components/Teacher/RegisterAttendance/Geo/Geo";
+
 export interface  IStudentClass{
     id: number,
     title: string,
@@ -20,7 +22,7 @@ export const getStudentClasses = async (teacher_id: Number, course_id: Number) =
     return await response.json();
 }
 
-export interface ICourse{
+export interface ISubject{
     id: number,
     title: string
 }
@@ -34,7 +36,7 @@ export const getCoursesByTeacherId = async (teacher_id: number) => {
     
     // Need to improve error handling as this API call is essential for registering attendance
     if(!response.ok){
-        let course: ICourse = {id: -1, title: "Error"}
+        let course: ISubject = {id: -1, title: "Error"}
         return [course]
     }
 
@@ -54,7 +56,7 @@ export const getModules = async () => {
     let response = fetchedModules;
     // // Need to improve error handling as this API call is essential for registering attendance
     // if(!response.ok){
-    //     let course: ICourse = {id: -1, title: "Error"}
+    //     let course: ISubject = {id: -1, title: "Error"}
     //     return [course]
     // }
 
@@ -75,3 +77,64 @@ export const fetchedModules = [
     { id: 7, timespan: "14:00 - 14:45" },
     { id: 8, timespan: "14:45 - 15:30" }
 ]
+
+export interface IAttendanceCodeDuration{
+    durationMinutes: number,
+    timeStamp: Date
+}
+
+
+export interface IRegisterAttendanceDTO{
+    subject: ISubject,
+    classes: IStudentClass[],
+    modules: IModule[],
+    coordinates: { latitude: number, longitude: number } | null
+    duration: { durationMinutes: number, timeStamp: string },
+    numberOfStudents: number | null
+}
+
+export const sendRegisterAttendanceInfo = async (subject: ISubject, classes: IStudentClass[],
+    selectedModules: IModule[], coordinates: ICoordinates, attendanceCodeDuration: IAttendanceCodeDuration, numberOfStudents: number) => {
+    
+    // Mocked endpoint
+    let url = new URL("https://run.mocky.io/v3/9e1d8240-f66f-492f-9ef1-c515d76bc641");
+
+    // Creating the body of the request
+    let registerAttendanceDTO: IRegisterAttendanceDTO = {
+        subject: subject,
+        classes: classes,
+        modules: selectedModules,
+        coordinates: coordinates.accuracy === 0 && coordinates.latitude === 0 ? null : {
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude
+        },
+        numberOfStudents: coordinates.accuracy !== 0 && coordinates.latitude !== 0 ? null : numberOfStudents,
+        duration: { // converts attendanceCodeDuration to DTO
+            durationMinutes: attendanceCodeDuration.durationMinutes, 
+            timeStamp: attendanceCodeDuration.timeStamp.toISOString()
+        },
+    }
+
+    console.log("registerAttendanceDTO", registerAttendanceDTO)
+
+    // Sending our newly created DTO to the backend
+    const response = await fetch(url.href, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(registerAttendanceDTO)
+      });
+      //response.json().then(data => console.log(data))
+    // Get the attendance code as a repsonse
+    return await response.json();
+}
+
+// response from api
+export interface IAttendanceCodeResponse{
+    id: string,
+    attendanceCode: string,
+    timestamp: Date,
+    duration: number, // minutes
+}

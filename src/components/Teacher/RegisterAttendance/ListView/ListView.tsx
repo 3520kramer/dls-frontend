@@ -3,11 +3,11 @@ import List from '@material-ui/core/List';
 import { ListItem, useStyles } from "./ListViewStyles";
 import ListItemText from '@material-ui/core/ListItemText';
 import { Paper } from '@material-ui/core';
-import { ICourse } from '../../../../services/RegisterAttendanceService';
+import { ISubject } from '../../../../services/RegisterAttendanceService';
 
 interface IProps{
     children?: React.ReactNode[],
-    listData: ICourse[],
+    listData: ISubject[],
     onChange: Function,
 }
   

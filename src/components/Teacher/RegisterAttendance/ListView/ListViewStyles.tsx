@@ -30,11 +30,6 @@ export const ListItem = withStyles({
       color: "white",
       opacity: 0.9,
     },
-    "&:hover": {
-      backgroundColor: "rgb(66, 83, 175)",
-      color: "white",
-      opacity: 0.8,
-    }
   },
   selected: {}
 })(MuiListItem);

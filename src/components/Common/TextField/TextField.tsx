@@ -9,7 +9,8 @@ type AppProps = {
     label?: string,
     onChange: Function, 
     disabled?: boolean,
-    value: number
+    value: number,
+    showError?: boolean,
 }
 
 // This is styling for the textField
@@ -25,7 +26,7 @@ createStyles({
 );
 
 // this is the component for our textField we use in Geo service 
-export default function TextField({type, label, onChange, disabled, value} : AppProps) {
+export default function TextField({type, label, onChange, disabled, value, showError} : AppProps) {
   const classes = useStyles();
   
 
@@ -39,13 +40,15 @@ export default function TextField({type, label, onChange, disabled, value} : App
 
   return (
     <form className={classes.root} noValidate autoComplete="off">
-        <MUITextField value={value}
+        <MUITextField
+            value={value}
             id="filled-basic" 
             variant="filled"
             type={type}
             label={label}
             onChange={handleTextChange}
-            disabled={disabled}    
+            disabled={disabled}
+            error={showError}
         />
     </form>
   );

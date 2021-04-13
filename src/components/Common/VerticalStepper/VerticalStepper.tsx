@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function getSteps() {
-  return ['Select Course and Class', 'Enable Location Services?', 'Generate Code!'];
+  return ['Select subject and class', 'Configure your code', 'Get generated code'];
 }
 
 function getStepContent(stepIndex: number, props: IProps) {
@@ -50,14 +50,22 @@ interface IProps{
   CoursesAndClasses: React.ReactNode,
   GenerateCode: React.ReactNode,
   Geo: React.ReactNode,
-  isNextButtonDisabled: boolean
+  isNextButtonDisabled: boolean,
+  onLastStep: Function,
+  hasReset: Function
 }
 
 
 const VerticalStepper: React.FC<IProps> = (props: IProps) => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState<number>(0);
   const steps = getSteps();
+
+  useEffect(()=> {
+    console.log("onLastStep", activeStep)
+    activeStep === steps.length - 1 ? props.onLastStep(true) : props.onLastStep(false);
+    // eslint-disable-next-line
+  },[activeStep])
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -68,44 +76,36 @@ const VerticalStepper: React.FC<IProps> = (props: IProps) => {
   };
 
   const handleReset = () => {
+    props.hasReset();
     setActiveStep(0);
   };
 
   return (
     <div className={classes.root}>
-      <div>
-        {activeStep === steps.length ? (
-          <div className={classes.stepper} >
-            <Typography className={classes.instructions}>All steps completed</Typography>
-            <Button onClick={handleReset}>Reset</Button>
-          </div>
-        ) : (
-          <div>
-            <div className={classes.stepper} >
-              {getStepContent(activeStep, props)}
-            </div>
-            <div className={classes.buttons}>
-              <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                className={classes.backButton}
-              >
-                Back
-              </Button>
-              <Button variant="contained" color="primary" onClick={handleNext} disabled={props.isNextButtonDisabled}>
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-              </Button>
-            </div>
-            <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map((label) => (
-                <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
-          </div>
-        )}
+      <div className={classes.stepper} >
+        {getStepContent(activeStep, props)}
       </div>
+      <div className={classes.buttons}>
+        {activeStep !== 2 &&
+          <Button
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            className={classes.backButton}
+          >
+            Back
+          </Button>
+        }
+        <Button variant="contained" color="primary" onClick={activeStep === steps.length - 1 ? handleReset : handleNext} disabled={props.isNextButtonDisabled}>
+          {activeStep === steps.length - 1 ? 'Create new attendance registration' : 'Next'}
+        </Button>
+      </div>
+      <Stepper activeStep={activeStep} alternativeLabel>
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
     </div>
   );
 }
