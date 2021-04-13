@@ -84,8 +84,8 @@ const CheckedListView: React.FC<IProps> = ({children, listData, onChange, allowM
     setChecked(newChecked);
   };
 
-  function isModule(pet: IModule | IStudentClass): pet is IModule {
-    return (pet as IModule).timespan !== undefined;
+  function isModule(item: IModule | IStudentClass): item is IModule {
+    return (item as IModule).timespan !== undefined;
   }
 
   return (
