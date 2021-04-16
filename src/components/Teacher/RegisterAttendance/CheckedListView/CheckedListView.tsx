@@ -5,7 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Paper } from '@material-ui/core';
-import { IModule, IStudentClass } from '../../../../services/RegisterAttendanceService';
+import { IModule, ISubject, IStudentClass, IStudent } from '../../../../services/RegisterAttendanceService';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IProps{
     children?: React.ReactNode[],
-    listData: IStudentClass[] | IModule[],
+    listData: IStudentClass[] | IModule[] | ISubject[] | IStudent[],
     onChange: Function,
     allowMultiToggle?: boolean
 }
@@ -91,7 +91,7 @@ const CheckedListView: React.FC<IProps> = ({children, listData, onChange, allowM
   return (
     <Paper className={classes.root} variant="outlined" >
         <List component="nav">
-          {listData.map((item: IModule | IStudentClass, index: number) => {
+          {listData.map((item: IModule | IStudentClass | ISubject | IStudent, index: number) => {
               const labelId = `checkbox-list-label-${index}`;
               let labelText = isModule(item) ? item.timespan : item.title;
               return (

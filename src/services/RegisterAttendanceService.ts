@@ -1,9 +1,14 @@
 import { ICoordinates } from "../components/Teacher/RegisterAttendance/Geo/Geo";
 import { COURSES_ROUTE } from "../api-endpoints/endpoints";
  
-export interface  IStudentClass{
+export interface IStudentClass{
     id: number,
     title: string,
+}
+
+export interface IStudent {
+    id: number,
+    title: string
 }
 
 export const getStudentClasses = async (teacher_id: Number, course_id: Number) => {
