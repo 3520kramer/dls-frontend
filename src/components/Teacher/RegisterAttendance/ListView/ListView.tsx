@@ -15,10 +15,11 @@ const ListView: React.FC<IProps> = ({children, listData, onChange}) => {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = useState(0); // initialize as 0 to have first item as default selected
   
-  // When the user chooses a new item in list we will update the
+  // We will pass the state to the parent component, when the user chooses
+  // a new item in list, or when the listData has finished the initial load
   useEffect(() => {
     if (listData.length >= 1) onChange(selectedIndex)
-  }, [selectedIndex])
+  }, [selectedIndex, listData])
 
   const handleListItemClick = (index: number) => setSelectedIndex(index);
   return (
