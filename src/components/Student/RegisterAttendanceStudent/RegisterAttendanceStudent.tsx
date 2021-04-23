@@ -4,12 +4,15 @@ import { Container, Col, Row } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ICoordinates } from '../../Teacher/RegisterAttendance/Geo/Geo';
+import Button from '../../Common/Button/Button';
+import { useStyles } from './RegisterAttendanceStudentStyles';
 
 
 // TODO: perhaps show that the students location is ok or bad. 
+// TODO: enable that the student can reset location
 
 const RegisterAttendanceStudent = () => {
-
+    const classes = useStyles();
     const [attendanceCode, setAttendanceCode] = useState<string>("");
     const [count, setCount] = useState<number>(1);
 
@@ -29,24 +32,18 @@ const RegisterAttendanceStudent = () => {
     // also holds the messages alerting the user that something is wrong
     useEffect(() => {
         console.log("location.accuracy", location.accuracy);
-        if (location.accuracy > 100) {
+        if (location.accuracy > 100 && count <= 3) {
             setCount(count + 1);
             console.log(count);
             getGeoLocation();
 
-            if (count === 2) {
-                toast.warn("trying to get your precise location. Please wait", { position: toast.POSITION.TOP_RIGHT });
-            }
-
             if (count === 3) {
-                //setHasEnabledGPS(false);
-                setCount(1);
                 toast.error("Can't get your precise location, try again", { position: toast.POSITION.TOP_RIGHT, autoClose: false });
             }
-        } 
+        }
     }, [location])
 
-    
+
     // this function gets the user location 
     const getGeoLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -64,17 +61,26 @@ const RegisterAttendanceStudent = () => {
         );
     }
 
+    const handleSendCode = () =>  {
+        
+    }
+
     return (
         <Container>
             <ToastContainer />
             <Row>
-                <Col>
-                    <TextField
-                        type="text"
-                        label="Attendance Code"
-                        onChange={(value: string) => setAttendanceCode(value)}
-                        value={attendanceCode}
-                    ></TextField>
+                <Col md={{ span: 6, offset: 3 }}>
+                    <div className={classes.root}>
+                        <TextField
+                            type="text"
+                            label="Attendance Code"
+                            onChange={(value: string) => setAttendanceCode(value)}
+                            value={attendanceCode}
+                        ></TextField>
+                        <Button onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleSendCode()}>
+                            send code
+                    </Button>
+                    </div>
                 </Col>
             </Row>
         </Container>
