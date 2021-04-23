@@ -3,7 +3,7 @@ import './Student.css'
 
 // temp. - have to create for student
 import Tabs from '../Common/Tabs/Tabs';
-import { RegisterAttendance } from '../Teacher/RegisterAttendance/RegisterAttendance'
+import RegisterAttendanceStudent from './RegisterAttendanceStudent/RegisterAttendanceStudent'
 import { AttendeeStatistics } from '../Teacher/AttendeeStatistics/AttendeeStatistics';
 
 
@@ -12,7 +12,7 @@ export const Student = () => {
         <>
             <Tabs
                 components={[
-                    { component: <RegisterAttendance />, label: "Student Code" },
+                    { component: <RegisterAttendanceStudent />, label: "Student Code" },
                     { component: <AttendeeStatistics />, label: "View Your Attendee Statistics" }
                 ]}
             />
