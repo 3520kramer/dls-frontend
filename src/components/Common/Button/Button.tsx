@@ -12,24 +12,20 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function ContainedButtons() {
+interface IProps {
+  children?: React.ReactNode,
+}
+
+const ContainedButton: React.FC<IProps> = ({children}) => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Button variant="contained">Default</Button>
       <Button variant="contained" color="primary">
-        Primary
-      </Button>
-      <Button variant="contained" color="secondary">
-        Secondary
-      </Button>
-      <Button variant="contained" disabled>
-        Disabled
-      </Button>
-      <Button variant="contained" color="primary" href="#contained-buttons">
-        Link
+        {children}
       </Button>
     </div>
   );
 }
+
+export default ContainedButton;
