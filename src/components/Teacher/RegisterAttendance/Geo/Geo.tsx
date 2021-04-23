@@ -159,6 +159,5 @@ const Geo: React.FC<IProps> = ({
     )
 }
 
-
 // export Geo so we can use it in other components
 export default Geo;

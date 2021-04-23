@@ -6,7 +6,7 @@ import ListView from '../ListView/ListView';
 
 interface IProps{
     children?: React.ReactNode,
-    onCoursesChange: Function,
+    onSubjectsChange: Function,
     onClassesChange: Function,
     onModulesChange: Function,
     subjects: ISubject[],
@@ -14,7 +14,7 @@ interface IProps{
     modules: IModule[]
 };
 
-const SubjectsAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClassesChange, onModulesChange, subjects, studentClasses, modules}) => {
+const SubjectsAndClasses: React.FC<IProps> = ({children, onSubjectsChange, onClassesChange, onModulesChange, subjects, studentClasses, modules}) => {
     return (
         <Container>
             <Row>
@@ -32,10 +32,10 @@ const SubjectsAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClas
             </Row>
             <Row>
                 <Col style={{padding: 0}}>
-                    { /* Courses */ }
+                    { /* Subjects */ }
                     <ListView
                         listData={subjects}
-                        onChange={onCoursesChange}
+                        onChange={onSubjectsChange}
                     />
                 </Col>
                 <Col>

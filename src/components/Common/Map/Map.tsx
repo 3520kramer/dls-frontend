@@ -28,7 +28,6 @@ const Map: React.FC<IProps> = ({latitude, longitude, hasEnabledGPS}) => {
     const [zoom, setZoom] = useState(17);
     
     const GOOGLE_API_KEY: string = process.env.REACT_APP_GOOGLE_API_KEY !== undefined ? process.env.REACT_APP_GOOGLE_API_KEY : "";
-    
     // for debugging
     useEffect(() => {
       console.log("hasEnabledGPS", hasEnabledGPS);
