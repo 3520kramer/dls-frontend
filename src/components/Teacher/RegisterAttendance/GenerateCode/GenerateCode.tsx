@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { IAttendanceCodeResponse } from '../../../../services/RegisterAttendanceService';
+import { IAttendanceCode } from '../../../../services/RegisterAttendanceService';
 import CountdownTimer from './CountdownTimer/CountdownTimer';
 import './GenerateCodeStyles.css';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
@@ -10,7 +10,7 @@ import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 
 interface IProps{
     children?: React.ReactNode,
-    attendanceCode: IAttendanceCodeResponse,
+    attendanceCode: IAttendanceCode,
 };
 
 const colors = [
@@ -70,8 +70,8 @@ const GenerateCode: React.FC<IProps> = ({children, attendanceCode}) => {
             <Row>
                 <Col md={{ span: 6, offset: 3 }}>
                     <CountdownTimer
-                        timestamp={attendanceCode.timestamp}
-                        duration={attendanceCode.duration}
+                        timestamp={attendanceCode.timeStamp}
+                        duration={attendanceCode.durationMinutes}
                     />
                 </Col>
             </Row>
