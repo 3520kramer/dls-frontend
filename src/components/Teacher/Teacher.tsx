@@ -10,7 +10,7 @@ export const Teacher = () => {
             <Tabs
                 components={[
                     {component: <RegisterAttendance/>, label: "Register Student Attendance"}, 
-                    {component: <AttendeeStatisticsController subjectList={[]}  classList={[]} studentList={[]}/>, label: "View Attendee Statistics"}
+                    {component: <AttendeeStatisticsController/>, label: "View Attendee Statistics"}
                 ]}
             />
         </>
