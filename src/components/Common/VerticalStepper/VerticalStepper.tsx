@@ -4,7 +4,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,7 +35,7 @@ function getSteps() {
 function getStepContent(stepIndex: number, props: IProps) {
   switch (stepIndex) {
     case 0:
-      return props.CoursesAndClasses;
+      return props.SubjectsAndClasses;
     case 1:
       return props.Geo;
     case 2:
@@ -47,7 +46,7 @@ function getStepContent(stepIndex: number, props: IProps) {
 }
 
 interface IProps{
-  CoursesAndClasses: React.ReactNode,
+  SubjectsAndClasses: React.ReactNode,
   GenerateCode: React.ReactNode,
   Geo: React.ReactNode,
   isNextButtonDisabled: boolean,

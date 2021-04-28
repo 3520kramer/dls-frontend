@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { ISubject, IModule, IStudentClass } from '../../../../services/RegisterAttendanceService';
 import CheckedListView from '../CheckedListView/CheckedListView';
@@ -6,15 +6,15 @@ import ListView from '../ListView/ListView';
 
 interface IProps{
     children?: React.ReactNode,
-    onCoursesChange: Function,
+    onSubjectsChange: Function,
     onClassesChange: Function,
     onModulesChange: Function,
-    courses: ISubject[],
+    subjects: ISubject[],
     studentClasses: IStudentClass[],
     modules: IModule[]
 };
 
-const CoursesAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClassesChange, onModulesChange, courses, studentClasses, modules}) => {
+const SubjectsAndClasses: React.FC<IProps> = ({children, onSubjectsChange, onClassesChange, onModulesChange, subjects, studentClasses, modules}) => {
     return (
         <Container>
             <Row>
@@ -32,10 +32,10 @@ const CoursesAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClass
             </Row>
             <Row>
                 <Col style={{padding: 0}}>
-                    { /* Courses */ }
+                    { /* Subjects */ }
                     <ListView
-                        listData={courses}
-                        onChange={onCoursesChange}
+                        listData={subjects}
+                        onChange={onSubjectsChange}
                     />
                 </Col>
                 <Col>
@@ -58,4 +58,4 @@ const CoursesAndClasses: React.FC<IProps> = ({children, onCoursesChange, onClass
     )
 }
 
-export default CoursesAndClasses;
+export default SubjectsAndClasses;

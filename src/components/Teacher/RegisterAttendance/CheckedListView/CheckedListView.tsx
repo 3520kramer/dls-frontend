@@ -84,8 +84,8 @@ const CheckedListView: React.FC<IProps> = ({children, listData, onChange, allowM
     setChecked(newChecked);
   };
 
-  function isModule(pet: IModule | IStudentClass): pet is IModule {
-    return (pet as IModule).timespan !== undefined;
+  function isModule(item: IModule | IStudentClass): item is IModule {
+    return (item as IModule).timespan !== undefined;
   }
 
   return (
@@ -93,7 +93,7 @@ const CheckedListView: React.FC<IProps> = ({children, listData, onChange, allowM
         <List component="nav">
           {listData.map((item: IModule | IStudentClass | ISubject | IStudent, index: number) => {
               const labelId = `checkbox-list-label-${index}`;
-              let labelText = isModule(item) ? item.timespan : item.title;
+              let labelText = isModule(item) ? `${item.timespan.start}-${item.timespan.end}` : item.title;
               return (
                 <ListItem key={`listitem-${index}`} role={undefined} dense button onClick={handleToggle(index)}> 
                     <Checkbox

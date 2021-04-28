@@ -86,15 +86,15 @@ const Geo: React.FC<IProps> = ({children, location, onLocationChange, onNumberOf
     }
 
     // takes textField input from number of students
-    const handleNumberOfStudentsChange = (value: number) => {
+    const handleNumberOfStudentsChange = (value: string) => {
        console.log("handleTextChange", value);
-       onNumberOfStudentsChange(value)
+       onNumberOfStudentsChange(Number.parseInt(value))
     }
 
     // takes textField input from code duration
-    const handleCodeDurationChange = (value: number) => {
-        console.log("handleTextChange", value);
-        onCodeDurationChange(value)
+    const handleCodeDurationChange = (value: string) => {
+        console.log("handleTextChange", value, typeof(value));
+        onCodeDurationChange(Number.parseInt(value))
     }
 
     const codeDurationhasError = () => selectedCodeDuration <= 0;
@@ -116,7 +116,7 @@ const Geo: React.FC<IProps> = ({children, location, onLocationChange, onNumberOf
                     <TextField 
                         type="number"
                         label="Number of students"
-                        onChange={handleNumberOfStudentsChange}
+                        onChange={(number: string) => handleNumberOfStudentsChange(number)}
                         disabled={hasEnabledGPS}
                         value={selectedNumberOfStudents} 
                         showError={numberOfStudentsHasError()} 
@@ -124,7 +124,7 @@ const Geo: React.FC<IProps> = ({children, location, onLocationChange, onNumberOf
                     <TextField 
                         type="number"
                         label="Code duration in mins"
-                        onChange={handleCodeDurationChange}  
+                        onChange={(number: string) => handleCodeDurationChange(number)}  
                         value={selectedCodeDuration}
                         showError={codeDurationhasError()}
                     />
@@ -141,7 +141,6 @@ const Geo: React.FC<IProps> = ({children, location, onLocationChange, onNumberOf
         </Container>
     )
 }
-
 
 // export Geo so we can use it in other components
 export default Geo;
