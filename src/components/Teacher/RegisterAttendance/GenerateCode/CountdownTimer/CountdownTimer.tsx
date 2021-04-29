@@ -23,12 +23,8 @@ const CountdownTimer: React.FC<IProps> = ({children, duration, timestamp}) => {
   };
 
   const getDuration = () => {    
-    // let currentTime = new Date();
-    // let codeCreationTime = timestamp;
-
-    // for testing purposes
-    let currentTime = new Date("2021-04-11T16:27:00.290Z");
-    let codeCreationTime = new Date("2021-04-11T16:26:00.290Z");
+    let currentTime = new Date();
+    let codeCreationTime = timestamp;
     
     let differenceInSeconds = (currentTime.getTime() - codeCreationTime.getTime()) / 1000;
     

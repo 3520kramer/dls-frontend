@@ -1,7 +1,22 @@
-export const ROOT_URL = process.env.REACT_APP_ROOT_URL || "localhost:port";
+import { IRegisterAttendanceDTO } from "../services/RegisterAttendanceService";
 
-export const MODULE_ROUTE = `${ROOT_URL}/modules`;
+export const ROOT_URL = process.env.REACT_APP_ROOT_URL || "";
 
-export const COURSES_ROUTE = process.env.REACT_APP_TEST_URL || "https://run.mocky.io/v3/3f8459f4-b181-4d9c-8a06-916eb831ea21";
+export const MODULE_ROUTE = `${ROOT_URL}/api/modules`;
 
+export const CLASSES_ROUTE = `${ROOT_URL}/api/rollcall/classes`;
 
+export const COURSES_ROUTE = "";
+
+export const INITIAL_INFO_ROUTE = `${ROOT_URL}/api/rollcall/initialinfo`;
+
+export const REQUEST_CODE_ROUTE = `${ROOT_URL}/api/rollcall/requestcode`;
+
+export const requestHeader = (type: string) => {
+    return {
+        'Access-Control-Request-Method': type,
+        "Origins": window.location.origin,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+}

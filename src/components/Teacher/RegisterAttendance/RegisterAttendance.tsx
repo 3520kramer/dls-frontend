@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import VerticalStepper from '../../Common/VerticalStepper/VerticalStepper'
-import CoursesAndClasses from './CoursesAndClasses/CoursesAndClasses';
+import SubjectsAndClasses from './SubjectsAndClasses/SubjectsAndClasses';
 import GenerateCode from './GenerateCode/GenerateCode';
 import './RegisterAttendance.css'
-import { ISubject, IStudentClass, getSubjectsByTeacherId, getStudentClasses, IModule, getModules, sendRegisterAttendanceInfo, IAttendanceCodeDuration, IAttendanceCodeResponse } from '../../../services/RegisterAttendanceService';
+import { ISubject, IStudentClass, getStudentClasses, IModule, sendRegisterAttendanceInfo, IAttendanceCodeDuration, IAttendanceCode, getInitialValues } from '../../../services/RegisterAttendanceService';
 import Geo, { ICoordinates } from './Geo/Geo';
 
 export const RegisterAttendance = () => {
-    const [courses, setCourses] = useState<ISubject[] | []>([]);
-    const [selectedCourse, setSelectedCourse] = useState<ISubject | null>(null);
+    const [subjects, setSubjects] = useState<ISubject[] | []>([]);
+    const [selectedSubject, setSelectedSubject] = useState<ISubject | null>(null);
 
     const [studentClasses, setStudentClasses] = useState<IStudentClass[] | []>([]);
     const [selectedStudentClasses, setSelectedStudentClasses] = useState<IStudentClass[] | []>([]);
@@ -18,71 +18,60 @@ export const RegisterAttendance = () => {
 
     const [selectedCodeDuration, setCodeDuration] = useState<number>(5);
     const [selectedNumberOfStudents, setSelectedNumberOfStudents] = useState<number>(1);
-    
-    const [selectedLocation, setSelectedLocation] = useState<ICoordinates>({latitude: 0, longitude: 0, accuracy: 0});
 
-    const [attendanceCode, setAttendenceCode] = useState<IAttendanceCodeResponse | null>(null);
+    const [selectedLocation, setSelectedLocation] = useState<ICoordinates>({ latitude: 0, longitude: 0, accuracy: 0 });
+
+    const [attendanceCode, setAttendenceCode] = useState<IAttendanceCode | null>(null);
 
     // When component mounts
     useEffect(() => {
+        getInitialValues().then(data => {
+            console.log("URL", data);
 
-        // Fetches the courses which will be passed to 
-        // the child components CoursesAndClasses and then to ListView
-        getSubjectsByTeacherId(1).then(data => {
-            setCourses(data)
-            handleCourseChange(0, data)
-            //setModules(getModules) // TODO: needs to be implemented in getSubjectsByTeacherId
+            setSubjects(data.subjects.map((subject: string) => ({ title: subject })));
+            setStudentClasses(data.classes.map((map: string) => ({ title: map })));
+            setModules(data.modules);
+
         });
-            getModules().then(data => setModules(data))
         //eslint-disable-next-line
-    },[])
+    }, [])
 
     useEffect(() => {
-        console.log('selectedCodeDuration', selectedCodeDuration);    
-    },[selectedCodeDuration])
+        console.log('selectedCodeDuration', selectedCodeDuration);
+    }, [selectedCodeDuration])
 
     useEffect(() => {
-        console.log('selectedNumberOfStudents', selectedNumberOfStudents);    
-    },[selectedNumberOfStudents])
-    
-    // When a course is selected we will need to fetch the 
-    // student classes related to the selected course
+        console.log('selectedNumberOfStudents', selectedNumberOfStudents);
+    }, [selectedNumberOfStudents])
+
+    // When a subject is selected we will need to fetch the student classes related to the selected subject
     useEffect(() => {
-        if (selectedCourse !== null) 
-            getStudentClasses(1, selectedCourse.id).then(classes => setStudentClasses(classes));
-    }, [selectedCourse])
+        if (selectedSubject !== null)
+            getStudentClasses(selectedSubject.title).then(classes => setStudentClasses(classes.map((_class: string) => ({ title: _class }))));
+    }, [selectedSubject])
 
     useEffect(() => {
-        console.log('selectedCourse', selectedCourse);    
-    },[selectedCourse])
+        console.log('selectedCourse', selectedSubject);
+    }, [selectedSubject])
 
     useEffect(() => {
-        console.log('selectedClasses', selectedStudentClasses);    
-    },[selectedStudentClasses])
+        console.log('selectedClasses', selectedStudentClasses);
+    }, [selectedStudentClasses])
 
     useEffect(() => {
         console.log('selectedModules', selectedModules);
-    },[selectedModules])
+    }, [selectedModules])
 
     useEffect(() => {
         console.log('attendanceCode', attendanceCode);
-    },[attendanceCode])
+    }, [attendanceCode])
 
-    // When the component mounts and call this function it will take data as an argument 
-    // as 'courses' state is updated to slow. On all other occasions we will use the local state 
-    const handleCourseChange = (index: number, data: ISubject[] | undefined) => {
-        let course;
-
-        if (data !== undefined){
-            course = data[index];
-        } else {
-            course = courses[index];
-        }
-
-        setSelectedCourse(course)
+    // Sets the state of the selected subject by the index from the list component
+    const handleSubjectChange = (index: number) => {
+        setSelectedSubject(subjects[index]);
     }
 
-    const handleStudentClassesChange = (indexes: number[]) => {        
+    const handleStudentClassesChange = (indexes: number[]) => {
         // Uses map to iterate the indexes and get the chosen studentClasses
         let classes = indexes.map(index => studentClasses[index])
         setSelectedStudentClasses(classes)
@@ -95,13 +84,13 @@ export const RegisterAttendance = () => {
     }
 
     // gets the number of students from Geo
-    const handleNumberOfStudentsChange = (value: number) => {        
+    const handleNumberOfStudentsChange = (value: number) => {
         setSelectedNumberOfStudents(value);
         console.log("handleNumberOfStudentsChange", value);
     }
 
     // gets the number of code duration from Geo
-    const handleCodeDurationChange = (value: number) => {        
+    const handleCodeDurationChange = (value: number) => {
         setCodeDuration(value);
         console.log("handleCodeDurationChange", value);
     }
@@ -112,63 +101,65 @@ export const RegisterAttendance = () => {
         setSelectedModules(chosenModules);
     }
 
-   
     // if any of the values are null or empty then the registration is not complete, 
     // and we will use this to determine if the next button should be disabled
     const hasNotCompletedRegistration = () => {
-        return !selectedCourse || selectedStudentClasses.length === 0 || selectedModules.length === 0;
+        return !selectedSubject || selectedStudentClasses.length === 0 || selectedModules.length === 0;
     };
 
     const handleLastStep = (isLastStep: boolean) => {
         console.log("handleLastStep", isLastStep)
-        if(isLastStep && selectedCourse && selectedStudentClasses.length >= 1 && selectedModules.length >= 1 ) {
-            let attendanceCode: IAttendanceCodeDuration = {durationMinutes: selectedCodeDuration, timeStamp: new Date()}
+        if (isLastStep && selectedSubject && selectedStudentClasses.length >= 1 && selectedModules.length >= 1) {
+            const newAttendanceCodeDuration: IAttendanceCodeDuration = { durationMinutes: selectedCodeDuration, timeStamp: new Date() }
 
             sendRegisterAttendanceInfo(
-                selectedCourse, 
-                selectedStudentClasses, 
-                selectedModules, 
-                selectedLocation, 
-                attendanceCode, 
+                selectedSubject,
+                selectedStudentClasses,
+                selectedModules,
+                selectedLocation,
+                newAttendanceCodeDuration,
                 selectedNumberOfStudents)
-                .then((data: IAttendanceCodeResponse ) => {
-                    let attendanceCode: IAttendanceCodeResponse = {id: data.id, attendanceCode: data.attendanceCode, timestamp: new Date(data.timestamp), duration: data.duration}
-                    setAttendenceCode(attendanceCode)
-            })
+                .then((attendanceCode: string) => {
+                    setAttendenceCode({
+                        attendanceCode: attendanceCode,
+                        durationMinutes: newAttendanceCodeDuration.durationMinutes,
+                        timeStamp: newAttendanceCodeDuration.timeStamp
+                    })
+                })
         }
     }
 
     const handleHasReset = () => {
-        setSelectedCourse(null);
+        setSelectedSubject(null);
         setSelectedStudentClasses([]);
         setSelectedModules([]);
         setCodeDuration(5);
         setSelectedNumberOfStudents(1)
-        setSelectedLocation({latitude: 0, longitude: 0, accuracy: 0})
+        setSelectedLocation({ latitude: 0, longitude: 0, accuracy: 0 })
         setAttendenceCode(null);
     }
 
     return (
         <>
             <VerticalStepper
-                isNextButtonDisabled={hasNotCompletedRegistration() || selectedCodeDuration <= 0 || selectedNumberOfStudents <= 0}
+                isNextButtonDisabled={hasNotCompletedRegistration() || selectedCodeDuration <= 0 || selectedNumberOfStudents <= 0}
                 onLastStep={handleLastStep}
                 hasReset={handleHasReset}
-                CoursesAndClasses={ 
-                    <CoursesAndClasses 
-                        courses={courses}
+                SubjectsAndClasses={
+                    <SubjectsAndClasses
+                        subjects={subjects}
                         studentClasses={studentClasses}
                         modules={modules}
-                        onCoursesChange={handleCourseChange}
-                        onClassesChange={handleStudentClassesChange}
-                        onModulesChange={handleModulesChange}
-                    /> 
+                        onSubjectsChange={(index: number) => handleSubjectChange(index)}
+                        onClassesChange={(indexes: number[]) => handleStudentClassesChange(indexes)}
+                        onModulesChange={(indexes: number[]) => handleModulesChange(indexes)}
+                    />
                 }
-                GenerateCode={ attendanceCode !== null && <GenerateCode attendanceCode={attendanceCode}/> }
+                GenerateCode={attendanceCode !== null && <GenerateCode attendanceCode={attendanceCode}/>}
                 Geo={
-                    <Geo 
+                    <Geo
                         location={selectedLocation}
-                        onLocationChange={handleLocationChange} 
+                        onLocationChange={handleLocationChange}
                         onNumberOfStudentsChange={handleNumberOfStudentsChange}
                         onCodeDurationChange={handleCodeDurationChange}
                         selectedNumberOfStudents={selectedNumberOfStudents}
