@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Header } from '../Common/Header/Header';
+import Header from '../Common/Header/Header';
 
 export function Home() {
     

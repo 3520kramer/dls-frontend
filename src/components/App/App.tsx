@@ -1,25 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import { BrowserRouter, Route, RouteComponentProps } from 'react-router-dom';
+import { Home } from '../Home/Home'
+import { Teacher } from '../Teacher/Teacher';
+import Header from '../Common/Header/Header';
 
 function App() {
+
+  const [activeCodes, setActiveCodes] = useState<number>(0);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload!!!!!!!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Route path="/:page" component={(props: RouteComponentProps) => <Header activeCodes={activeCodes} {...props}/> }/>
+        <Route exact path="/"> <Home/> </Route>
+        <Route exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)}/> </Route>
+      </BrowserRouter>
+    </React.StrictMode>
   );
 }
 
