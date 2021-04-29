@@ -15,7 +15,8 @@ interface IProps {
     selectedNumberOfStudents: number,
     onCodeDurationChange: Function,
     selectedCodeDuration: number,
-    location: ICoordinates
+    location: ICoordinates,
+    handleIsNextButtonDisabledinGeo: Function
 };
 
 // interface that holds our coordinates
@@ -33,7 +34,8 @@ const Geo: React.FC<IProps> = ({
     onNumberOfStudentsChange,
     selectedNumberOfStudents,
     onCodeDurationChange,
-    selectedCodeDuration }) => {
+    selectedCodeDuration,
+    handleIsNextButtonDisabledinGeo }) => {
 
     const [hasEnabledGPS, setHasEnabledGPS] = useState<boolean>(false);
     const [count, setCount] = useState<number>(1);
@@ -72,7 +74,7 @@ const Geo: React.FC<IProps> = ({
                 setCount(1);
                 toast.error("Can't get your precise location, try again", { position: toast.POSITION.TOP_RIGHT, autoClose: false });
             }
-        } 
+        }
     }, [location])
 
     // this function gets the user location 
@@ -117,6 +119,27 @@ const Geo: React.FC<IProps> = ({
             return false;
         }
     };
+
+    // handles if next button is disabled or not by the input 
+    const handleIsNextButtonDisabled = () => {
+        if (hasEnabledGPS) {
+            if (selectedCodeDuration <= 0 || !selectedCodeDuration) {
+                return true;
+            }
+        } else if (!hasEnabledGPS) {
+            if (!selectedCodeDuration || !selectedNumberOfStudents || selectedCodeDuration <= 0 || selectedNumberOfStudents <= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    useEffect(() => {
+        let hasError = handleIsNextButtonDisabled();
+        console.log("handleIsNextButtonDisabled", hasError);
+
+        handleIsNextButtonDisabledinGeo(hasError);
+    }, [selectedNumberOfStudents, selectedCodeDuration])
 
     // Returns the view of the funtional component
     return (

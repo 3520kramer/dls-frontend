@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ICoordinates } from '../../Teacher/RegisterAttendance/Geo/Geo';
 import Button from '../../Common/Button/Button';
 import { useStyles } from './RegisterAttendanceStudentStyles';
-
+import { sendRegisterAttendanceStudentInfo } from '../../../services/RegisterAttendanceStudentService';
 
 // TODO: perhaps show that the students location is ok or bad. 
 // TODO: enable that the student can reset location
@@ -15,7 +15,6 @@ const RegisterAttendanceStudent = () => {
     const classes = useStyles();
     const [attendanceCode, setAttendanceCode] = useState<string>("");
     const [count, setCount] = useState<number>(1);
-
     const [location, setLocation] = useState<ICoordinates>({ latitude: 0, longitude: 0, accuracy: 0 });
 
 
@@ -61,8 +60,9 @@ const RegisterAttendanceStudent = () => {
         );
     }
 
-    const handleSendCode = () =>  {
-        
+    // function for handling the data getting send to the service layer
+    const handleSendCode = () => {
+        sendRegisterAttendanceStudentInfo(location, attendanceCode);
     }
 
     return (
