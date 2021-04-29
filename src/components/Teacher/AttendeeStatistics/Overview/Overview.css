@@ -1,0 +1,20 @@
+.overview {
+    border: 1px solid lightgray;
+    margin-top: 10px;
+    border-radius: 3px;
+}
+
+.overview div div:nth-last-of-type(1){
+    text-align: right;
+}
+
+.overview ul {
+    list-style: none;
+    padding: 0;
+    padding-left: 10px;
+}
+
+.overview ul li span {
+    padding-right: 10px;
+    float: right;
+}
