@@ -28,7 +28,6 @@ const Map: React.FC<IProps> = ({latitude, longitude, hasEnabledGPS}) => {
     const [zoom, setZoom] = useState(17);
     
     const GOOGLE_API_KEY: string = process.env.REACT_APP_GOOGLE_API_KEY !== undefined ? process.env.REACT_APP_GOOGLE_API_KEY : "";
-
     // for debugging
     useEffect(() => {
       console.log("hasEnabledGPS", hasEnabledGPS);
@@ -58,7 +57,7 @@ const Map: React.FC<IProps> = ({latitude, longitude, hasEnabledGPS}) => {
       >
       <div className={hasEnabledGPS === false ? "hideMap": ""} style={{ height: '50vh', width: '100%' }} >
         <GoogleMapReact
-          bootstrapURLKeys={{ key: process.env.GOOGLE_API_KEY || GOOGLE_API_KEY }}
+          bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
           defaultCenter={{lat: 0, lng: 0}}
           center={{lat: latitude, lng: longitude}}
           defaultZoom={zoom}

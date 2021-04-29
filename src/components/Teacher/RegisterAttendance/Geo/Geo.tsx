@@ -2,20 +2,21 @@ import React, { useEffect, useState } from 'react';
 import Map from '../../../Common/Map/Map';
 import ToggleSwitch from '../../../Common/ToggleSwitch/ToggleSwitch';
 import TextField from '../../../Common/TextField/TextField'
-
+import { Container, Col, Row } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Container, Col, Row } from 'react-bootstrap';
+
 
 // interface that we use to define which props our component can have.
-interface IProps{
+interface IProps {
     children?: React.ReactNode,
     onLocationChange: Function,
     onNumberOfStudentsChange: Function,
     selectedNumberOfStudents: number,
     onCodeDurationChange: Function,
     selectedCodeDuration: number,
-    location: ICoordinates
+    location: ICoordinates,
+    handleIsNextButtonDisabledinGeo: Function
 };
 
 // interface that holds our coordinates
@@ -23,119 +24,158 @@ export interface ICoordinates {
     accuracy: number
     latitude: number
     longitude: number
-  }
- 
+}
+
 // functional component that handles the geolocation of the user 
-const Geo: React.FC<IProps> = ({children, location, onLocationChange, onNumberOfStudentsChange, selectedNumberOfStudents, onCodeDurationChange, selectedCodeDuration}) => {
+const Geo: React.FC<IProps> = ({
+    children,
+    location,
+    onLocationChange,
+    onNumberOfStudentsChange,
+    selectedNumberOfStudents,
+    onCodeDurationChange,
+    selectedCodeDuration,
+    handleIsNextButtonDisabledinGeo }) => {
 
     const [hasEnabledGPS, setHasEnabledGPS] = useState<boolean>(false);
     const [count, setCount] = useState<number>(1);
 
     // When component mounts
     useEffect(() => {
-        if(hasEnabledGPS) {
+        if (hasEnabledGPS) {
             getGeoLocation();
-        }else{
-            onLocationChange({latitude: 0, longitude: 0, accuracy: 0});
+            onNumberOfStudentsChange(0);
+        } else {
+            onNumberOfStudentsChange(1);
+            onLocationChange({ latitude: 0, longitude: 0, accuracy: 0 });
         }
-    },[hasEnabledGPS])
+    }, [hasEnabledGPS])
 
     // logs the location of the user. only used for debugging
     useEffect(() => {
         console.log('location', location);
-    },[location])
+    }, [location])
 
     // this checks each time location is called is location.accuracy is within 100 meters. if not tries again
     // also holds the messages alerting the user that something is wrong
     useEffect(() => {
         console.log("location.accuracy", location.accuracy);
-        if(location.accuracy > 100) {
-            setCount(count+1);
+        if (location.accuracy > 100) {
+            setCount(count + 1);
             console.log(count);
             getGeoLocation();
 
             if (count === 2) {
-                toast.warn("trying to get your precise location. Please wait", { position: toast.POSITION.TOP_RIGHT });    
+                toast.warn("trying to get your precise location. Please wait", { position: toast.POSITION.TOP_RIGHT });
             }
-            
+
             if (count === 3) {
                 setHasEnabledGPS(false);
                 setCount(1);
                 toast.error("Can't get your precise location, try again", { position: toast.POSITION.TOP_RIGHT, autoClose: false });
             }
-        } else {
-            onLocationChange(location);
         }
-    },[location])
+    }, [location])
 
     // this function gets the user location 
     const getGeoLocation = () => {
-        navigator.geolocation.getCurrentPosition( (position) => {
-      
+        navigator.geolocation.getCurrentPosition((position) => {
+
             const coordinates: ICoordinates = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              accuracy: position.coords.accuracy,
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                accuracy: position.coords.accuracy,
             }
             onLocationChange(coordinates);
-          },
-          (error => {
-            console.error("Error Code = " + error.code + " - " + error.message);
-          }), {enableHighAccuracy: true}
+        },
+            (error => {
+                console.error("Error Code = " + error.code + " - " + error.message);
+            }), { enableHighAccuracy: true }
         );
     }
 
     // takes textField input from number of students
     const handleNumberOfStudentsChange = (value: string) => {
-       console.log("handleTextChange", value);
-       onNumberOfStudentsChange(Number.parseInt(value))
+        if (value !== undefined && value.match("^[0-9]*$") && value.length <= 3) {
+            console.log("handleTextChange", value);
+            onNumberOfStudentsChange(Number.parseInt(value));
+        }
     }
 
     // takes textField input from code duration
     const handleCodeDurationChange = (value: string) => {
-        console.log("handleTextChange", value, typeof(value));
-        onCodeDurationChange(Number.parseInt(value))
+        if (value !== undefined && value.match("^[0-9]*$") && value.length <= 3) {
+            console.log("handleTextChange", value);
+            onCodeDurationChange(Number.parseInt(value));
+        }
     }
 
     const codeDurationhasError = () => selectedCodeDuration <= 0;
 
-    const numberOfStudentsHasError = () => selectedNumberOfStudents <= 0;
+    const numberOfStudentsHasError = () => {
+        if (!hasEnabledGPS) {
+            return selectedNumberOfStudents <= 0
+        } else {
+            return false;
+        }
+    };
+
+    // handles if next button is disabled or not by the input 
+    const handleIsNextButtonDisabled = () => {
+        if (hasEnabledGPS) {
+            if (selectedCodeDuration <= 0 || !selectedCodeDuration) {
+                return true;
+            }
+        } else if (!hasEnabledGPS) {
+            if (!selectedCodeDuration || !selectedNumberOfStudents || selectedCodeDuration <= 0 || selectedNumberOfStudents <= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    useEffect(() => {
+        let hasError = handleIsNextButtonDisabled();
+        console.log("handleIsNextButtonDisabled", hasError);
+
+        handleIsNextButtonDisabledinGeo(hasError);
+    }, [selectedNumberOfStudents, selectedCodeDuration])
 
     // Returns the view of the funtional component
     return (
         <Container>
-            <ToastContainer/>
+            <ToastContainer />
             <Row>
-                <Col> 
-                    <ToggleSwitch 
+                <Col>
+                    <ToggleSwitch
                         condition={hasEnabledGPS}
-                        setCondition={setHasEnabledGPS}
+                        setCondition={(value: boolean) => setHasEnabledGPS(value)}
                         names="EnableLocation"
                         label="Enable Location Services"
                     />
-                    <TextField 
+                    <TextField
                         type="number"
                         label="Number of students"
-                        onChange={(number: string) => handleNumberOfStudentsChange(number)}
+                        onChange={(value: string) => handleNumberOfStudentsChange(value)}
                         disabled={hasEnabledGPS}
-                        value={selectedNumberOfStudents} 
-                        showError={numberOfStudentsHasError()} 
+                        value={selectedNumberOfStudents.toString()}
+                        showError={numberOfStudentsHasError()}
                     />
-                    <TextField 
+                    <TextField
                         type="number"
                         label="Code duration in mins"
-                        onChange={(number: string) => handleCodeDurationChange(number)}  
-                        value={selectedCodeDuration}
+                        onChange={(value: string) => handleCodeDurationChange(value)}
+                        value={selectedCodeDuration.toString()}
                         showError={codeDurationhasError()}
                     />
 
                 </Col>
                 <Col>
-                    <Map 
-                        longitude={location.longitude} 
+                    <Map
+                        longitude={location.longitude}
                         latitude={location.latitude}
                         hasEnabledGPS={hasEnabledGPS}
-                    />     
+                    />
                 </Col>
             </Row>
         </Container>

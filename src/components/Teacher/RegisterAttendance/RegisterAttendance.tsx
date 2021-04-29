@@ -18,6 +18,7 @@ export const RegisterAttendance = () => {
 
     const [selectedCodeDuration, setCodeDuration] = useState<number>(5);
     const [selectedNumberOfStudents, setSelectedNumberOfStudents] = useState<number>(1);
+    const [hasError, setError] = useState<boolean>(false);
 
     const [selectedLocation, setSelectedLocation] = useState<ICoordinates>({ latitude: 0, longitude: 0, accuracy: 0 });
 
@@ -139,10 +140,15 @@ export const RegisterAttendance = () => {
         setAttendenceCode(null);
     }
 
+
+    const handleIsNextButtonDisabledinGeo = (hasError: boolean) => {
+        setError(hasError);
+    }
+
     return (
         <>
             <VerticalStepper
-                isNextButtonDisabled={hasNotCompletedRegistration() || selectedCodeDuration <= 0 || selectedNumberOfStudents <= 0}
+                isNextButtonDisabled={hasNotCompletedRegistration() || hasError}
                 onLastStep={handleLastStep}
                 hasReset={handleHasReset}
                 SubjectsAndClasses={
@@ -155,7 +161,7 @@ export const RegisterAttendance = () => {
                         onModulesChange={(indexes: number[]) => handleModulesChange(indexes)}
                     />
                 }
-                GenerateCode={attendanceCode !== null && <GenerateCode attendanceCode={attendanceCode}/>}
+                GenerateCode={attendanceCode !== null && <GenerateCode attendanceCode={attendanceCode} />}
                 Geo={
                     <Geo
                         location={selectedLocation}
@@ -164,6 +170,7 @@ export const RegisterAttendance = () => {
                         onCodeDurationChange={handleCodeDurationChange}
                         selectedNumberOfStudents={selectedNumberOfStudents}
                         selectedCodeDuration={selectedCodeDuration}
+                        handleIsNextButtonDisabledinGeo={handleIsNextButtonDisabledinGeo}
                     />
                 }
             />
