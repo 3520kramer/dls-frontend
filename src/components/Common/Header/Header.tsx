@@ -70,7 +70,7 @@ const Header: React.FC<IProps> = (props: IProps) => {
           <Typography variant="h6" className={classes.title}>
             Skoleprotokol 2.0
           </Typography>
-          { page === "teacher" &&
+          {/* page === "teacher" &&
             <IconWithDropdown
               buttonAriaLabel="show profile"
               className={classes.buttons}
@@ -80,10 +80,10 @@ const Header: React.FC<IProps> = (props: IProps) => {
                 </Badge>
               }
             >
-              {/* <MenuItem onClick={() => handleSignOut()}>Sign out</MenuItem> */}
+              <MenuItem onClick={() => handleSignOut()}>Sign out</MenuItem>
               <CodeGrid/>
             </IconWithDropdown>
-          }
+          */}
           <IconWithDropdown
             buttonIcon={<AccountCircleIcon fontSize="large"/>}
             buttonAriaLabel="show profile"
