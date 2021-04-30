@@ -1,6 +1,6 @@
 import { IRegisterAttendanceDTO } from "../services/RegisterAttendanceService";
 
-export const ROOT_URL = process.env.REACT_APP_ROOT_URL || "";
+export const ROOT_URL = process.env.REACT_APP_ROOT_URL || "https://roll-call-staging.herokuapp.com";
 
 export const MODULE_ROUTE = `${ROOT_URL}/api/modules`;
 

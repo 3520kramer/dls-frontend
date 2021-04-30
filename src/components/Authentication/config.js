@@ -8,7 +8,7 @@ export default {
     oidc: {
       clientId: '0oanuseooUTP22YMM5d6',
       issuer: 'https://dev-77393568.okta.com/oauth2/default',
-      redirectUri: 'https://localhost:3000/',
+      redirectUri: 'http://localhost:3000/',
       scopes: ['openid', 'profile', 'email'],
       pkce: true,
       disableHttpsCheck: false,
@@ -17,17 +17,3 @@ export default {
       messagesUrl: 'http://localhost:8000/api/messages',
     },
 };
-
-// export default {
-//   oidc: {
-//     clientId: CLIENT_ID,
-//     issuer: ISSUER,
-//     redirectUri: REDIRECT_URI,
-//     scopes: ['openid', 'profile', 'email'],
-//     pkce: true,
-//     disableHttpsCheck: OKTA_TESTING_DISABLEHTTPSCHECK,
-//   },
-//   resourceServer: {
-//     messagesUrl: 'http://localhost:8000/api/messages',
-//   },
-// };

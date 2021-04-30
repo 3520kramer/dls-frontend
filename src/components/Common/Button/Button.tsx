@@ -14,14 +14,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IProps {
   children?: React.ReactNode,
+  onClick: React.MouseEventHandler<HTMLButtonElement> , 
 }
 
-const ContainedButton: React.FC<IProps> = ({children}) => {
+const ContainedButton: React.FC<IProps> = ({children, onClick}) => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <Button variant="contained" color="primary">
+      <Button variant="contained" color="primary" onClick={(event: React.MouseEvent<HTMLButtonElement>) => onClick(event)}> 
         {children}
       </Button>
     </div>

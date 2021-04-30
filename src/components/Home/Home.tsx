@@ -63,7 +63,8 @@ export function Home() {
             && (
             <div style={{textAlign: "center"}}>
                 <h1>Components avaliable for now</h1>
-                <Link to="/teacher">Teacher component</Link>
+                <Link to="/teacher">Teacher component</Link><br></br>
+                <Link to="/student">Student component</Link>
             </div>
             )}
 
