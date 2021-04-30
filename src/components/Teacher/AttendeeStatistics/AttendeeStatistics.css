@@ -2,6 +2,11 @@
     margin: 0;
 }
 
+.attendee-statistics h6 {
+    text-align: center;
+    margin-top: 15px;
+}
+
 .attendee-statistics .MuiPaper-root {
     max-width: unset;
     margin: 0;
@@ -16,15 +21,12 @@
 }
 
 .attendee-statistics .attendee-graph {
-    height: 250px; 
+    height: 350px; 
     border: 1px solid lightgray;
     margin-top: 10px;
     border-radius: 3px;
 }
 
-.attendee-statistics .attendee-statistics-data {
-    height: 150px; 
-    border: 1px solid lightgray;
-    margin-top: 10px;
-    border-radius: 3px;
+.attendee-statistics .mixed-chart {
+    height: 330px;
 }
