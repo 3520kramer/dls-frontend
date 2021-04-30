@@ -8,6 +8,11 @@ export interface  IStudentClass{
     title: string,
 }
 
+export interface IStudent {
+    id: number,
+    title: string
+}
+
 export const getStudentClasses = async (subject: string) => {
     let url = new URL(CLASSES_ROUTE);
 
