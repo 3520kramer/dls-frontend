@@ -30,7 +30,7 @@ interface IComponent{
 
 type Props = {
   components: IComponent[],
-  onTabChange: Function
+  onTabChange?: Function
 }
 
 export default function CenteredTabs({ components, onTabChange }: Props) {
@@ -39,7 +39,7 @@ export default function CenteredTabs({ components, onTabChange }: Props) {
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
-    onTabChange();
+    if(onTabChange !== undefined) onTabChange() ;
   };
 
   return (
