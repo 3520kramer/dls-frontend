@@ -5,7 +5,6 @@ import './Student.css'
 import Tabs from '../Common/Tabs/Tabs';
 import RegisterAttendanceStudent from './RegisterAttendanceStudent/RegisterAttendanceStudent'
 
-
 export const Student = () => {
     return (
         <>

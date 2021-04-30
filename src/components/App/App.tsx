@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
-import './App.css';
-import { BrowserRouter, Route, RouteComponentProps } from 'react-router-dom';
+import React from 'react';
+import { Route, useHistory, Switch } from 'react-router-dom';
+import { OktaAuth } from '@okta/okta-auth-js';
+import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
+import { Container } from 'semantic-ui-react';
+import config from '../Authentication/config';
+import CustomLoginComponent from '../Authentication/Login';
+import Navbar from '../Common/Navbar/Navbar';
 import { Home } from '../Home/Home'
 import { Teacher } from '../Teacher/Teacher';
-import Header from '../Common/Header/Header';
+
+const oktaAuth = new OktaAuth(config.oidc);
+
 
 function App() {
+    const history = useHistory(); // example from react-router
 
-  const [activeCodes, setActiveCodes] = useState<number>(0);
+  const customAuthHandler = () => {
+    // Redirect to the /login page that has a CustomLoginComponent
+    history.push('/login');
+  };
 
   return (
-    <React.StrictMode>
-      <BrowserRouter>
-        <Route path="/:page" component={(props: RouteComponentProps) => <Header activeCodes={activeCodes} {...props}/> }/>
-        <Route exact path="/"> <Home/> </Route>
-        <Route exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)}/> </Route>
-      </BrowserRouter>
-    </React.StrictMode>
+    <Security
+      oktaAuth={oktaAuth}
+      onAuthRequired={customAuthHandler}
+    >
+    <Navbar />
+        <Container text style={{ marginTop: '7em' }}>
+            <Switch>
+                <Route path="/login/callback" component={LoginCallback} />
+                <Route path="/login" component={CustomLoginComponent} />
+                <SecureRoute exact path="/"> <Home/> </SecureRoute>
+                <SecureRoute exact path="/teacher"> <Teacher/> </SecureRoute>
+            </Switch>
+        </Container>
+    </Security>
   );
 }
 
