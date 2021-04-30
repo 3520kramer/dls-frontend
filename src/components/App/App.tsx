@@ -28,16 +28,16 @@ function App() {
       oktaAuth={oktaAuth}
       onAuthRequired={customAuthHandler}
     >
-    <Navbar />
-        <Container text style={{ marginTop: '7em' }}>
+    {/* <Navbar /> */}
+        {/* <Container text style={{ marginTop: '7em' }}> */}
+        <Route path="/:page" component={(props: RouteComponentProps) => <Header activeCodes={activeCodes} {...props}/> }/>
             <Switch>
-                <Route path="/:page" component={(props: RouteComponentProps) => <Header activeCodes={activeCodes} {...props}/> }/>
                 <Route path="/login/callback" component={LoginCallback} />
                 <Route path="/login" component={CustomLoginComponent} />
                 <SecureRoute exact path="/"> <Home/> </SecureRoute>
                 <SecureRoute exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)}/> </SecureRoute>
             </Switch>
-        </Container>
+        {/* </Container> */}
     </Security>
   );
 }
