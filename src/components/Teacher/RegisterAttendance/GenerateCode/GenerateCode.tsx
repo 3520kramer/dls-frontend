@@ -21,15 +21,32 @@ const colors = [
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      padding: '20px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    paper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     rootButton: {
         '& > *': {
           margin: theme.spacing(1),
         },
+    },
+    codeContent: {
+        // float: 'left',
+        padding: '12px',
+        alignSelf: 'flex-start',
+        // display: 'inline-block',
+    },
+    copyIcon: {
+        alignSelf: 'flex-end',
+        // float: 'right',
+        // display: 'inline-block',
+
     }
   }),
 );
@@ -53,17 +70,16 @@ const GenerateCode: React.FC<IProps> = ({children, attendanceCode}) => {
             <Row>
                 <Col md={{ span: 6, offset: 3 }}>
                     <div className={classes.root}>
-                        <Paper elevation={3} className="code-wrapper">
-                            <h2 className="code-content">{attendanceCode.attendanceCode}</h2>
-                            <div className={classes.root}>
-                                <IconButton 
-                                    aria-label="FileCopy"
-                                    onClick={() => {navigator.clipboard.writeText(attendanceCode.attendanceCode)}}
-                                >
-                                    <FileCopyOutlinedIcon />
-                                </IconButton>
-                            </div>
-                        </Paper>
+                    <Paper elevation={3} className={classes.paper}>
+                        <h2 className={classes.codeContent}>{attendanceCode.attendanceCode}</h2>
+                        <IconButton 
+                            className={classes.copyIcon}
+                            aria-label="FileCopy"
+                            onClick={() => {navigator.clipboard.writeText(attendanceCode.attendanceCode)}}
+                        >
+                            <FileCopyOutlinedIcon/>
+                        </IconButton>
+                    </Paper>
                     </div>
                 </Col>
             </Row>

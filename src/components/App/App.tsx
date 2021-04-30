@@ -11,6 +11,7 @@ import { Teacher } from '../Teacher/Teacher';
 
 const oktaAuth = new OktaAuth(config.oidc);
 
+
 function App() {
     const history = useHistory(); // example from react-router
 
