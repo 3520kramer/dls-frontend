@@ -7,6 +7,7 @@ import { ICoordinates } from '../../Teacher/RegisterAttendance/Geo/Geo';
 import Button from '../../Common/Button/Button';
 import { useStyles } from './RegisterAttendanceStudentStyles';
 import { sendRegisterAttendanceStudentInfo } from '../../../services/RegisterAttendanceStudentService';
+import { useOktaAuth } from '@okta/okta-react';
 
 // TODO: perhaps show that the students location is ok or bad. 
 // TODO: enable that the student can reset location
@@ -17,10 +18,18 @@ const RegisterAttendanceStudent = () => {
     const [count, setCount] = useState<number>(1);
     const [location, setLocation] = useState<ICoordinates>({ latitude: 0, longitude: 0, accuracy: 0 });
 
+    const [accessToken, setAccessToken] = useState<string | null>(null);
+    const { authState, oktaAuth } = useOktaAuth();
 
     useEffect(() => {
         getGeoLocation();
     }, []);
+
+    useEffect(() => {
+        if(authState.isAuthenticated && authState.accessToken){
+            setAccessToken(authState.accessToken?.accessToken);
+        }
+    }, [authState])
 
     // just for debug
     useEffect(() => {
@@ -62,11 +71,12 @@ const RegisterAttendanceStudent = () => {
 
     // function for handling the data getting send to the service layer
     const handleSendCode = () => {
-        sendRegisterAttendanceStudentInfo(location, attendanceCode).then((data) => {
-            toast.info(data, { position: toast.POSITION.TOP_RIGHT, autoClose: false });
+        if(accessToken){
+            sendRegisterAttendanceStudentInfo(accessToken, location, attendanceCode).then((data) => {
+                toast.info(data, { position: toast.POSITION.TOP_RIGHT, autoClose: false });
 
-        }).catch(error => toast.warn(error, { position: toast.POSITION.TOP_RIGHT, autoClose: false }))
-
+            }).catch(error => toast.warn(error, { position: toast.POSITION.TOP_RIGHT, autoClose: false }))
+        }
     }
 
     return (

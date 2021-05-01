@@ -1,29 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Paper } from '@material-ui/core';
 import { IModule, ISubject, IStudentClass, IStudent } from '../../../../services/RegisterAttendanceService';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      backgroundColor: theme.palette.background.paper,
-      width: '100%',
-      maxWidth: 250,
-      maxHeight: 420, 
-      minHeight: 420,
-      overflow: 'auto',
-      margin: 'auto',
-    },
-    paper: {
-        flexGrow: 1,
-        width: '100%',
-      },
-  }),
-);
+import useStyles from './CheckedListViewStyles'; 
 
 interface IProps{
     children?: React.ReactNode[],

@@ -3,8 +3,10 @@ import AttendeeStatistics from './AttendeeStatistics';
 import { IStudentClass, ISubject, IStudent, getInitialValues } from '../../../services/RegisterAttendanceService';
 import { fetchUserData } from '../../../services/AttendeeStatisticsService';
 import moment from 'moment';
+import { useOktaAuth } from '@okta/okta-react';
 
-interface IProps {
+
+interface IState {
     userData: Array<object>, 
     subjectList: ISubject[], 
     classList: IStudentClass[], 
@@ -16,7 +18,11 @@ interface IProps {
     overviewData: object;
 }
 
-export default class AttendeeStatisticsController extends Component<{}, IProps> {
+interface IProps {
+    accessToken: string | null;
+}
+
+export default class AttendeeStatisticsController extends Component<IProps, IState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -28,7 +34,7 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
             classesSelected: [],
             studentsSelected: [],
             graphData: [],
-            overviewData: []
+            overviewData: [],
         }
 
         this.setSubjects = this.setSubjects.bind(this);
@@ -37,17 +43,20 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
     }
 
     componentDidMount() {
+        console.log("comp did mount", this.props.accessToken)
         this.handleData();
-    } 
+    }
 
     // Set initial state
     async handleData(): Promise<void> {
-        const listData = await getInitialValues();
+        if(this.props.accessToken){
+            const listData = await getInitialValues(this.props.accessToken);
+            this.setState({
+                subjectList: this.createList(listData.subjects),
+                classList: this.createList(listData.classes),
+            });
+        }
 
-        this.setState({
-            subjectList: this.createList(listData.subjects),
-            classList: this.createList(listData.classes),
-        });
     }
 
     // Create the list with the correct format to be passed as a prop
@@ -79,7 +88,7 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
             this.setState({
                 subjectsSelected: selection
             }, () => {
-                this.getStudents();
+                if(this.props.accessToken) this.getStudents(this.props.accessToken);
             });
         }
     }
@@ -91,7 +100,7 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
             this.setState({
                 classesSelected: selection
             }, () => {
-                this.getStudents();
+                if(this.props.accessToken) this.getStudents(this.props.accessToken);
             });
         }
     }
@@ -109,9 +118,10 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
     }
 
     // Populate initial student list
-    async getStudents(): Promise<void> {
+    async getStudents(accessToken: string): Promise<void> {
+        console.log("getstuidents")
         if(this.state.subjectsSelected.length !== 0 && this.state.classesSelected.length !== 0) {
-            const userData = await fetchUserData(this.state.subjectsSelected, this.state.classesSelected);
+            const userData = await fetchUserData(accessToken, this.state.subjectsSelected, this.state.classesSelected);
 
             this.setState({
                 userData,

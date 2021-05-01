@@ -1,7 +1,5 @@
 import { ICoordinates } from "../components/Teacher/RegisterAttendance/Geo/Geo";
-import { CLASSES_ROUTE, COURSES_ROUTE, INITIAL_INFO_ROUTE, requestHeader, REQUEST_CODE_ROUTE } from "../api-endpoints/endpoints";
-
-const TEACHERID: string = "606df774ed3b07d2f921be10"; 
+import { CLASSES_ROUTE, INITIAL_INFO_ROUTE, requestHeader, REQUEST_CODE_ROUTE } from "../api-endpoints/endpoints";
 
 export interface  IStudentClass{
     id?: number,
@@ -13,13 +11,12 @@ export interface IStudent {
     title: string
 }
 
-export const getStudentClasses = async (subject: string) => {
+export const getStudentClasses = async (accessToken: string, subject: string) => {
     let url = new URL(CLASSES_ROUTE);
 
-    url.searchParams.append("teacherid", TEACHERID.toString())
     url.searchParams.append("subject", subject.toString())
     
-    let response = await fetch(url.href, { method: "GET", headers: requestHeader("GET") });
+    let response = await fetch(url.href, { method: "GET", headers: requestHeader("GET", accessToken) });
 
     return await response.json();
 }
@@ -43,9 +40,7 @@ export interface IAttendanceCodeDuration{
     timeStamp: Date
 }
 
-
 export interface IRegisterAttendanceDTO{
-    teacherId: string,
     subject: string,//ISubject,
     classes: string[],//IStudentClass[],
     modules: IModule[],
@@ -54,7 +49,7 @@ export interface IRegisterAttendanceDTO{
     numberOfStudents: number | null
 }
 
-export const sendRegisterAttendanceInfo = async (subject: ISubject, classes: IStudentClass[],
+export const sendRegisterAttendanceInfo = async (accessToken: string, subject: ISubject, classes: IStudentClass[],
     selectedModules: IModule[], coordinates: ICoordinates, attendanceCodeDuration: IAttendanceCodeDuration, numberOfStudents: number) => {
     
     let url = new URL(REQUEST_CODE_ROUTE);
@@ -73,19 +68,18 @@ export const sendRegisterAttendanceInfo = async (subject: ISubject, classes: ISt
 
     // Creating the body
     let registerAttendanceDTO: IRegisterAttendanceDTO = {
-        teacherId: TEACHERID,
         subject: subjectDTO,
         classes: classesDTO,
         modules: selectedModules,
-        coordinates: coordinates.accuracy === 0 && coordinates.latitude === 0 ? null : coordinatesDTO,
-        numberOfStudents: coordinates.accuracy !== 0 && coordinates.latitude !== 0 ? null : numberOfStudents,
+        coordinates: coordinates.accuracy === 100 && coordinates.latitude === 0 ? null : coordinatesDTO,
+        numberOfStudents: coordinates.accuracy !== 0 && coordinates.latitude !== 0 ? 0 : numberOfStudents,
         duration: durationDTO
     }
 
     console.log("registerAttendanceDTO", registerAttendanceDTO)
 
     // Sending our newly created DTO to the backend
-    const response = await fetch(url.href, { method: "POST", headers: requestHeader("POST"), body: JSON.stringify(registerAttendanceDTO)});
+    const response = await fetch(url.href, { method: "POST", headers: requestHeader("POST", accessToken), body: JSON.stringify(registerAttendanceDTO)});
     
     // Get the attendance code as a repsonse
     return await response.json();
@@ -99,12 +93,10 @@ export interface IAttendanceCode{
 }
 
 
-export const getInitialValues = async () => {
+export const getInitialValues = async (accessToken: string) => {
     let url = new URL(INITIAL_INFO_ROUTE);
-
-    url.searchParams.append("teacherid", TEACHERID.toString());
     
-    const response = await fetch(url.href, { method: "GET", headers: requestHeader("GET") });
+    const response = await fetch(url.href, { method: "GET", headers: requestHeader("GET", accessToken) });
 
     return await response.json();
 }

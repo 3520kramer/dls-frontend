@@ -9,6 +9,7 @@ import Navbar from '../Common/Navbar/Navbar';
 import { Home } from '../Home/Home'
 import { Teacher } from '../Teacher/Teacher';
 import Header from '../Common/Header/Header';
+import PageNotFound from './PageNotFound/PageNotFound';
 import { Student } from '../Student/Student';
 
 const oktaAuth = new OktaAuth(config.oidc);
@@ -36,6 +37,7 @@ function App() {
             <SecureRoute exact path="/student" component={Student} />
             <SecureRoute exact path="/"> <Home/> </SecureRoute>
             <SecureRoute exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)}/> </SecureRoute>
+            <Route component={(props: RouteComponentProps) => <PageNotFound {...props}/>}/>
         </Switch>
     </Security>
     

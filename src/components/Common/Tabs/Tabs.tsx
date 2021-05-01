@@ -39,7 +39,7 @@ export default function CenteredTabs({ components, onTabChange }: Props) {
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
-    if(onTabChange !== undefined) onTabChange() ;
+    if(onTabChange !== undefined) onTabChange();
   };
 
   return (
