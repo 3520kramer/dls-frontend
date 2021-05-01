@@ -18,7 +18,6 @@ interface IProps {
 }
 
 const AttendeeStatistics: React.FC<IProps> = ({subjectList, classList, studentList, onSubjectsChange, onClassesChange, onStudentsChange, graphData, overviewData}) => {
-    console.log('Overview data:', overviewData)
     return (
         <div className="attendee-statistics">
             <div className="row">

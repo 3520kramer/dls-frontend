@@ -12,6 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconWithDropdown from './IconWithDropdown/IconWithDropdown'
 import { RouteComponentProps } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
+import { useOktaAuth } from '@okta/okta-react';
 
 interface IProps extends RouteComponentProps{
   activeCodes: number
@@ -24,13 +25,17 @@ interface IParams{
 const Header: React.FC<IProps> = (props: IProps) => {
   const classes = useStyles();
   const { page } = useParams<IParams>();
+  const { authState, oktaAuth } = useOktaAuth();
+
+  const logout = async () => oktaAuth.signOut();
+  oktaAuth.tokenManager.clear();
 
   useEffect(() => {
     console.log("header", page);
   },[]);
 
   const handleSignOut = () => {
-    props.history.push("/");
+    props.history.push("/login");
   }
   
   function FormRow() {
@@ -89,7 +94,8 @@ const Header: React.FC<IProps> = (props: IProps) => {
             buttonAriaLabel="show profile"
             className={classes.buttons}
           >
-            <MenuItem onClick={() => handleSignOut()}>Sign out</MenuItem>
+            {authState.isAuthenticated && <MenuItem onClick={logout}>Sign out</MenuItem>}
+            {!authState.isPending && !authState.isAuthenticated && <MenuItem onClick={logout}>Sign in</MenuItem>}
           </IconWithDropdown>
         </Toolbar>
       </AppBar>
