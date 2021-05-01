@@ -78,7 +78,7 @@ const RegisterAttendanceStudent = () => {
                         <TextField
                             type="text"
                             label="Attendance Code"
-                            onChange={(value: string) => setAttendanceCode(value)}
+                            onChange={(value: string) => setAttendanceCode(value.trim())}
                             value={attendanceCode}
                         ></TextField>
                         <Button onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleSendCode()}>

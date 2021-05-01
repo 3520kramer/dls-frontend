@@ -7,7 +7,7 @@ const STUDENTID: string = "6075d39f03e2bc1884194738";
 
 
 export interface IRegisterAttendanceStudentDTO {
-    studentId: string,
+    student_Id: string,
     attendanceCode: string,
     timeStamp: string,
     coordinates: { latitude: number, longitude: number } | null
@@ -27,7 +27,7 @@ export const sendRegisterAttendanceStudentInfo = async (coordinates: ICoordinate
 
     // Creating the body
     let registerAttendanceStudentDTO: IRegisterAttendanceStudentDTO = {
-        studentId: STUDENTID,
+        student_Id: STUDENTID,
         attendanceCode: attendanceCode,
         timeStamp: date.toISOString(),
         coordinates: coordinates.accuracy === 0 && coordinates.latitude === 0 ? null : coordinatesDTO,

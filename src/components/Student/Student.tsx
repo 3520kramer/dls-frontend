@@ -10,7 +10,7 @@ import RegisterAttendanceStudent from './RegisterAttendanceStudent/RegisterAtten
 export const Student = () => {
 
     useEffect(() => {
-        console.log("heelo youre on student page");
+        console.log("studentpage");
     }, []);
 
     return (

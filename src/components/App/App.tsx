@@ -37,6 +37,7 @@ function App() {
           <Route exact path="/login/callback" component={LoginCallback} />
           <Route exact path="/login" component={CustomLoginComponent} />
           <Route exact path="/student" component={Student} />
+          <Route exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)} /> </Route>
           {/* <SecureRoute exact path="/"> <Home /> </SecureRoute>
           <SecureRoute exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)} /> </SecureRoute> */}
 
