@@ -15,7 +15,6 @@ export const Teacher = (props: IProbs) => {
     },[])
 
     const getActiveCodes = () => {
-        console.log("HEEHEHEH");
         props.activeCodesCallback(2);
     } 
     return (
