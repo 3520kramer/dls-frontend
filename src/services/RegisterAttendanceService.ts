@@ -78,7 +78,7 @@ export const sendRegisterAttendanceInfo = async (subject: ISubject, classes: ISt
         classes: classesDTO,
         modules: selectedModules,
         coordinates: coordinates.accuracy === 0 && coordinates.latitude === 0 ? null : coordinatesDTO,
-        numberOfStudents: coordinates.accuracy !== 0 && coordinates.latitude !== 0 ? null : numberOfStudents,
+        numberOfStudents: coordinates.accuracy !== 0 && coordinates.latitude !== 0 ? 0 : numberOfStudents,
         duration: durationDTO
     }
 

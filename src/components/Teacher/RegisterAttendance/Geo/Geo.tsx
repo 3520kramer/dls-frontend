@@ -42,12 +42,13 @@ const Geo: React.FC<IProps> = ({
 
     // When component mounts
     useEffect(() => {
+        
         if (hasEnabledGPS) {
             getGeoLocation();
             onNumberOfStudentsChange(0);
         } else {
             onNumberOfStudentsChange(1);
-            onLocationChange({ latitude: 0, longitude: 0, accuracy: 0 });
+            onLocationChange({ latitude: 0, longitude: 0, accuracy: 100 });
         }
     }, [hasEnabledGPS])
 
@@ -110,20 +111,18 @@ const Geo: React.FC<IProps> = ({
         }
     }
 
-    const codeDurationhasError = () => selectedCodeDuration <= 0;
+    const codeDurationhasError = () => selectedCodeDuration <= 0 || !selectedCodeDuration;
 
     const numberOfStudentsHasError = () => {
         if (!hasEnabledGPS) {
-            return selectedNumberOfStudents <= 0
-        } else {
-            return false;
+            return selectedNumberOfStudents <= 0 || !selectedNumberOfStudents
         }
     };
 
     // handles if next button is disabled or not by the input 
     const handleIsNextButtonDisabled = () => {
         if (hasEnabledGPS) {
-            if (selectedCodeDuration <= 0 || !selectedCodeDuration) {
+            if (selectedCodeDuration <= 0 || !selectedCodeDuration || location.accuracy >= 100) {
                 return true;
             }
         } else if (!hasEnabledGPS) {
@@ -139,7 +138,7 @@ const Geo: React.FC<IProps> = ({
         console.log("handleIsNextButtonDisabled", hasError);
 
         handleIsNextButtonDisabledinGeo(hasError);
-    }, [selectedNumberOfStudents, selectedCodeDuration])
+    }, [selectedNumberOfStudents, selectedCodeDuration, location])
 
     // Returns the view of the funtional component
     return (
