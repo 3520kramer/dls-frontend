@@ -41,8 +41,8 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
 
     // Fetch the subject and class data, this should probably be passed down from parent component
     async fetchListData() {
-        const classesSubjectsUrl = "https://run.mocky.io/v3/92a13aaf-4136-4c3d-ad7b-e120bc08fdd6";
-        // const classesSubjectsUrl = "https://roll-call-backend-staging.herokuapp.com/api/rollcall/initialinfo?teacherid=606df774ed3b07d2f921be10";
+        // const classesSubjectsUrl = "https://run.mocky.io/v3/92a13aaf-4136-4c3d-ad7b-e120bc08fdd6";
+        const classesSubjectsUrl = "https://roll-call-backend-staging.herokuapp.com/api/rollcall/initialinfo?teacherid=606df774ed3b07d2f921be10";
         const response = await fetch(classesSubjectsUrl).then((async res => {
             const data = await res.json();
             return data;
@@ -64,8 +64,8 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
             const str = cls.title.replaceAll(' ', '%20');
             return `class=${str}`;
         });
-        const studentsUrl = "https://run.mocky.io/v3/8718e80f-3f3d-41b9-a5ce-c1bb9f936f05";
-        // const studentsUrl = `https://roll-call-backend-staging.herokuapp.com/api/statistics?${subjectQueryArray.toString()}&${classQueryArray.toString()}`;
+        // const studentsUrl = "https://run.mocky.io/v3/8718e80f-3f3d-41b9-a5ce-c1bb9f936f05";
+        const studentsUrl = `https://roll-call-backend-staging.herokuapp.com/api/statistics?${subjectQueryArray.toString()}&${classQueryArray.toString()}`;
         const response = await fetch(studentsUrl).then((async res => {
             const data = await res.json();
             return data;
