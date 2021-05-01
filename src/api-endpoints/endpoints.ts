@@ -12,6 +12,8 @@ export const INITIAL_INFO_ROUTE = `${ROOT_URL}/api/rollcall/initialinfo`;
 
 export const REQUEST_CODE_ROUTE = `${ROOT_URL}/api/rollcall/requestcode`;
 
+export const REQUEST_STUDENT_ROUTE = `${ROOT_URL}/api/rollcall/registerattendance`;
+
 export const requestHeader = (type: string) => {
     return {
         'Access-Control-Request-Method': type,
