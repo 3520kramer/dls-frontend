@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import AttendeeStatistics from './AttendeeStatistics';
-import { IStudentClass, ISubject, IStudent } from '../../../services/RegisterAttendanceService';
+import { IStudentClass, ISubject, IStudent, getInitialValues } from '../../../services/RegisterAttendanceService';
+import { fetchUserData } from '../../../services/AttendeeStatisticsService';
 import moment from 'moment';
 
 interface IProps {
@@ -37,47 +38,11 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
 
     componentDidMount() {
         this.handleData();
-    }
-
-    // Fetch the subject and class data, this should probably be passed down from parent component
-    async fetchListData() {
-        const classesSubjectsUrl = "https://run.mocky.io/v3/92a13aaf-4136-4c3d-ad7b-e120bc08fdd6";
-        // const classesSubjectsUrl = "https://roll-call-backend-staging.herokuapp.com/api/rollcall/initialinfo?teacherid=606df774ed3b07d2f921be10";
-        const response = await fetch(classesSubjectsUrl).then((async res => {
-            const data = await res.json();
-            return data;
-        }));
-
-        console.log('List response:', response)
-        return response;
-    }
-
-    // Fetch user data belonging to selected class and subject
-    async fetchUserData() {
-        const subjectQueryArray = this.state.subjectsSelected.map((subject: any) => {
-            console.log('Subject:', subject)
-            const str = subject.title.replaceAll(' ', '%20');
-            return `subject=${str}`;
-        });
-
-        const classQueryArray = this.state.classesSelected.map((cls: any) => {
-            const str = cls.title.replaceAll(' ', '%20');
-            return `class=${str}`;
-        });
-        const studentsUrl = "https://run.mocky.io/v3/8718e80f-3f3d-41b9-a5ce-c1bb9f936f05";
-        // const studentsUrl = `https://roll-call-backend-staging.herokuapp.com/api/statistics?${subjectQueryArray.toString()}&${classQueryArray.toString()}`;
-        const response = await fetch(studentsUrl).then((async res => {
-            const data = await res.json();
-            return data;
-        }));
-
-        console.log('User response:', response);
-        return response;
     } 
 
     // Set initial state
     async handleData(): Promise<void> {
-        const listData = await this.fetchListData();
+        const listData = await getInitialValues();
 
         this.setState({
             subjectList: this.createList(listData.subjects),
@@ -146,7 +111,7 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
     // Populate initial student list
     async getStudents(): Promise<void> {
         if(this.state.subjectsSelected.length !== 0 && this.state.classesSelected.length !== 0) {
-            const userData = await this.fetchUserData();
+            const userData = await fetchUserData(this.state.subjectsSelected, this.state.classesSelected);
 
             this.setState({
                 userData,
@@ -186,13 +151,13 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
             let attendedClassCounter: number = 0;
             let attendancePercent: number = 0;
 
-            for(let j = 0; j < selectedUsers[i].attendance.length; j++) {
+            for(let j = 0; j < selectedUsers[i].attendanceLog.length; j++) {
                 classCounter++;
-                if(selectedUsers[i].attendance[j].attended) {
+                if(selectedUsers[i].attendanceLog[j].attended) {
                     attendedClassCounter++;
                 }
 
-                const formattedDate = moment(selectedUsers[i].attendance[j].date).format('DD-MM-YY');
+                const formattedDate = moment(selectedUsers[i].attendanceLog[j].date).format('DD-MM-YY');
                 const percentDiff: number = ((attendedClassCounter - classCounter)/classCounter)*100;
                 attendancePercent = Math.round(100 - Math.abs(percentDiff));
 
@@ -224,7 +189,7 @@ export default class AttendeeStatisticsController extends Component<{}, IProps> 
                 hexCode: this.randomHexCode()
             });
         }
-        console.log('State:', this.state)
+
         this.setState({
             graphData,
             overviewData
