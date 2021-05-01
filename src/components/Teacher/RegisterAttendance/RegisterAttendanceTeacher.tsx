@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import VerticalStepper from '../../Common/VerticalStepper/VerticalStepper'
 import SubjectsAndClasses from './SubjectsAndClasses/SubjectsAndClasses';
 import GenerateCode from './GenerateCode/GenerateCode';
-import './RegisterAttendance.css'
+import './RegisterAttendanceTeacher.css'
 import { ISubject, IStudentClass, getStudentClasses, IModule, sendRegisterAttendanceInfo, IAttendanceCodeDuration, IAttendanceCode, getInitialValues } from '../../../services/RegisterAttendanceService';
 import Geo, { ICoordinates } from './Geo/Geo';
 import { ToastContainer, toast } from 'react-toastify';
 import { useOktaAuth } from '@okta/okta-react';
 
-export const RegisterAttendance = () => {
+const RegisterAttendanceTeacher = () => {
     const [subjects, setSubjects] = useState<ISubject[] | []>([]);
     const [selectedSubject, setSelectedSubject] = useState<ISubject | null>(null);
 
@@ -202,3 +202,5 @@ export const RegisterAttendance = () => {
         </>
     );
 }
+
+export default RegisterAttendanceTeacher;
