@@ -1,6 +1,6 @@
 import { ROOT_URL, requestHeader } from "../api-endpoints/endpoints";
 
-export const fetchUserData = async (subjectsSelected: Array<object>, classesSelected: Array<object>) => {
+export const fetchUserData = async (accessToken: string, subjectsSelected: Array<object>, classesSelected: Array<object>) => {
     const subjectQueryArray = subjectsSelected.map((subject: any) => {
         const str = subject.title.replaceAll(' ', '%20');
         return `subject=${str}`;
@@ -14,7 +14,7 @@ export const fetchUserData = async (subjectsSelected: Array<object>, classesSele
     const studentsUrl = `${ROOT_URL}/api/statistics?${subjectQueryArray.toString()}&${classQueryArray.toString()}`;
     const response = await fetch(studentsUrl, {
         method: 'GET',
-        headers: requestHeader('GET')
+        headers: requestHeader(accessToken, 'GET')
         }).then((async res => {
             const data = await res.json();
             return data;

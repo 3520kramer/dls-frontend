@@ -14,7 +14,7 @@ export interface IRegisterAttendanceStudentDTO {
 }
 
 
-export const sendRegisterAttendanceStudentInfo = async (coordinates: ICoordinates, attendanceCode: string) => {
+export const sendRegisterAttendanceStudentInfo = async (accessToken: string, coordinates: ICoordinates, attendanceCode: string) => {
 
     let url = new URL(REQUEST_STUDENT_ROUTE);
 
@@ -38,7 +38,7 @@ export const sendRegisterAttendanceStudentInfo = async (coordinates: ICoordinate
     // Sending our newly created DTO to the backend
     const response = await fetch(url.href, {
         method: "POST",
-        headers: requestHeader("POST"),
+        headers: requestHeader(accessToken, "POST"),
         body: JSON.stringify(registerAttendanceStudentDTO)
     });
 
