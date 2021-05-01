@@ -1,0 +1,11 @@
+.auth-org-logo {
+    max-width: unset !important;
+    max-height: unset !important;
+    width: auto !important;
+    height: 150px !important;
+    
+}
+
+.okta-sign-in-header.auth-header {
+    padding: 0 !important;
+}

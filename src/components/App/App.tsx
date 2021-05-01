@@ -1,4 +1,4 @@
-import React, { useEffect, useState }from 'react';
+import React, { useState }from 'react';
 import { Route, useHistory, Switch, RouteComponentProps } from 'react-router-dom';
 import { OktaAuth } from '@okta/okta-auth-js';
 import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
@@ -15,7 +15,7 @@ const oktaAuth = new OktaAuth(config.oidc);
 
 
 function App() {
-    const history = useHistory(); // example from react-router
+  const history = useHistory(); // example from react-router
 
   const [activeCodes, setActiveCodes] = useState<number>(0);
 
@@ -25,27 +25,22 @@ function App() {
   };
 
   return (
-    // <Security
-    //   oktaAuth={oktaAuth}
-    //   onAuthRequired={customAuthHandler}
-    // >
-    <>
-                      <Route path="/:page" component={(props: RouteComponentProps) => <Header activeCodes={activeCodes} {...props}/> }/>
-
-    {/* <Navbar />
-        <Container text style={{ marginTop: '7em' }}> */}
+    <Security
+      oktaAuth={oktaAuth}
+      onAuthRequired={customAuthHandler}
+    >
+    {/* <Navbar /> */}
+        {/* <Container text style={{ marginTop: '7em' }}> */}
+        <Route path="/:page" component={(props: RouteComponentProps) => <Header activeCodes={activeCodes} {...props}/> }/>
             <Switch>
                 <Route path="/login/callback" component={LoginCallback} />
                 <Route path="/login" component={CustomLoginComponent} />
-                {/* <SecureRoute exact path="/"> <Home/> </SecureRoute>
-                <SecureRoute exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)}/> </SecureRoute> */}
-                <Route exact path="/"> <Home/> </Route>
-                <Route exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)}/> </Route>
+                <SecureRoute exact path="/"> <Home/> </SecureRoute>
+                <SecureRoute exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)}/> </SecureRoute>
                 <Route component={(props: RouteComponentProps) => <PageNotFound {...props}/>}/>
             </Switch>
-        </>
-    //     </Container>
-    // </Security>
+        {/* </Container> */}
+    </Security>
   );
 }
 
