@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -13,7 +13,7 @@ import IconWithDropdown from './IconWithDropdown/IconWithDropdown'
 import { RouteComponentProps } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
 import { useOktaAuth } from '@okta/okta-react';
-
+import { IUserInfo } from './../../Authentication/AuthInterfaces'
 interface IProps extends RouteComponentProps{
   activeCodes: number
 }
@@ -26,16 +26,30 @@ const Header: React.FC<IProps> = (props: IProps) => {
   const classes = useStyles();
   const { page } = useParams<IParams>();
   const { authState, oktaAuth } = useOktaAuth();
-
-  const logout = async () => oktaAuth.signOut();
-  oktaAuth.tokenManager.clear();
-
+  const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
+  
   useEffect(() => {
     console.log("header", page);
   },[]);
 
-  const handleSignOut = () => {
-    props.history.push("/login");
+  useEffect(() => {
+    console.log("userInfo", userInfo);
+  },[userInfo]);
+  
+  useEffect(() => {
+    if (!authState.isAuthenticated) {
+      // When user isn't authenticated, forget any user info
+      setUserInfo(null);
+    } else {
+      oktaAuth.getUser().then((info: any) => {
+        setUserInfo(info);
+      });
+    }
+  }, [authState, oktaAuth]); // Update if authState changes
+
+  const logout = async () => {
+    oktaAuth.signOut();
+    oktaAuth.tokenManager.clear();
   }
   
   function FormRow() {
@@ -50,6 +64,7 @@ const Header: React.FC<IProps> = (props: IProps) => {
       </React.Fragment>
     );
   }
+
   const CodeGrid = () => {
     return (
       <div className={classes.root}>
@@ -72,7 +87,7 @@ const Header: React.FC<IProps> = (props: IProps) => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h5" className={classes.title}>
             Skoleprotokol 2.0
           </Typography>
           {/* page === "teacher" &&
@@ -89,14 +104,21 @@ const Header: React.FC<IProps> = (props: IProps) => {
               <CodeGrid/>
             </IconWithDropdown>
           */}
-          <IconWithDropdown
-            buttonIcon={<AccountCircleIcon fontSize="large"/>}
-            buttonAriaLabel="show profile"
-            className={classes.buttons}
-          >
-            {authState.isAuthenticated && <MenuItem onClick={logout}>Sign out</MenuItem>}
-            {!authState.isPending && !authState.isAuthenticated && <MenuItem onClick={logout}>Sign in</MenuItem>}
-          </IconWithDropdown>
+          {authState.isAuthenticated &&// userInfo !== null &&
+          <>
+            <Typography variant="h6">
+              Hi, {userInfo !== null ? userInfo.name : ""}
+            </Typography>
+            <IconWithDropdown
+              buttonIcon={<AccountCircleIcon fontSize="large"/>}
+              buttonAriaLabel="show profile"
+              className={classes.buttons}
+            >
+              {authState.isAuthenticated && <MenuItem onClick={logout}>Sign out</MenuItem>}
+              {!authState.isPending && !authState.isAuthenticated && <MenuItem onClick={logout}>Sign in</MenuItem>}
+            </IconWithDropdown>
+            </>
+          }
         </Toolbar>
       </AppBar>
     </div>

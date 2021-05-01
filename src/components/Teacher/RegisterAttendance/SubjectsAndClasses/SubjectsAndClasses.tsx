@@ -19,9 +19,7 @@ const SubjectsAndClasses: React.FC<IProps> = ({children, onSubjectsChange, onCla
         <Container>
             <Row>
                 <Col>
-                    <div style={{padding: "0 40px"}}>
-                        <h4 style={{textAlign: 'center', paddingBottom: '20px'}}>Pick one subject</h4>
-                    </div>
+                    <h4 style={{textAlign: 'center', paddingBottom: '20px'}}>Pick one subject</h4>
                 </Col>
                 <Col>
                     <h4 style={{textAlign: 'center', paddingBottom: '20px'}}>Select one or more classes</h4>
@@ -31,21 +29,21 @@ const SubjectsAndClasses: React.FC<IProps> = ({children, onSubjectsChange, onCla
                 </Col>
             </Row>
             <Row>
-                <Col style={{padding: 0}}>
+                <Col className="d-flex justify-content-center">
                     { /* Subjects */ }
                     <ListView
                         listData={subjects}
                         onChange={onSubjectsChange}
                     />
                 </Col>
-                <Col>
+                <Col className="d-flex justify-content-center">
                     { /* Classes */ }
                     <CheckedListView
                         listData={studentClasses}
                         onChange={onClassesChange}
                     /> 
                 </Col>
-                <Col>
+                <Col className="d-flex justify-content-center">
                     { /* Modules */ }
                     <CheckedListView
                         listData={modules}

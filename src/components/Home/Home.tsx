@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-// import { Header } from '../Common/Header/Header';
-
 import { useOktaAuth } from '@okta/okta-react';
 import { useHistory } from 'react-router-dom';
-import { Button, Header } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
+import { IUserInfo } from './../Authentication/AuthInterfaces'
 
 export function Home() {
-    const [count, setCount] = useState(0);
-
-    const countProps = {count: count, setCount: setCount }
-
     useEffect(() => {
         console.log("Env:", process.env);
     })
@@ -18,7 +13,7 @@ export function Home() {
     // Start Okta stuff
     const history = useHistory();
     const { authState, oktaAuth } = useOktaAuth();
-    const [userInfo, setUserInfo] = useState(null);
+    const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
   
     useEffect(() => {
       if (!authState.isAuthenticated) {
@@ -26,6 +21,7 @@ export function Home() {
         setUserInfo(null);
       } else {
         oktaAuth.getUser().then((info: any) => {
+          console.log("info", info)
           setUserInfo(info);
         });
       }
@@ -41,7 +37,6 @@ export function Home() {
         );
     }
     // End Okta stuff
-    
     return(
         <>  
             {/* Not logged in */}
@@ -59,20 +54,15 @@ export function Home() {
             && <div>Loading user information...</div>}
 
             {/* Logged in and retrieved user info */}
-            {authState.isAuthenticated && userInfo
-            && (
+            {authState.isAuthenticated && userInfo &&
+            //userInfo.role === "teacher" ? history.push("/teacher") : history.push("/student")
+            (
             <div style={{textAlign: "center"}}>
                 <h1>Components avaliable for now</h1>
                 <Link to="/teacher">Teacher component</Link><br></br>
                 <Link to="/student">Student component</Link>
             </div>
             )}
-
-            {/*             
-            <Header
-                { ...countProps }
-            /> 
-            */}
         </>
     )
 }

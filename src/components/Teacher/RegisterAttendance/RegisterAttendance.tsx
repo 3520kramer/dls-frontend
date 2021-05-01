@@ -6,6 +6,7 @@ import './RegisterAttendance.css'
 import { ISubject, IStudentClass, getStudentClasses, IModule, sendRegisterAttendanceInfo, IAttendanceCodeDuration, IAttendanceCode, getInitialValues } from '../../../services/RegisterAttendanceService';
 import Geo, { ICoordinates } from './Geo/Geo';
 import { ToastContainer, toast } from 'react-toastify';
+import { useOktaAuth } from '@okta/okta-react';
 
 export const RegisterAttendance = () => {
     const [subjects, setSubjects] = useState<ISubject[] | []>([]);
@@ -25,20 +26,32 @@ export const RegisterAttendance = () => {
 
     const [attendanceCode, setAttendenceCode] = useState<IAttendanceCode | null>(null);
 
-    // When component mounts
-    useEffect(() => {
-        getInitialValues().then(data => {
-            console.log("URL", data);
-            setSelectedSubject({ title: data.subjects[0]});
-            setSubjects(data.subjects.map((subject: string) => ({ title: subject })));
-            setStudentClasses(data.classes.map((map: string) => ({ title: map })));
-            setModules(data.modules);
+    const [accessToken, setAccessToken] = useState<string | null>(null);
+    const { authState, oktaAuth } = useOktaAuth();
 
-        }).catch(error => {
-            toast.error("Unable to fetch data", {position: toast.POSITION.TOP_RIGHT, autoClose: false })
-        });
+    useEffect(() => {
+        if(authState.isAuthenticated && authState.accessToken){
+            setAccessToken(authState.accessToken?.accessToken);
+        }
+    }, [authState])
+
+    // When component mounts and authentication has update 
+    useEffect(() => {
+        if(accessToken){
+            getInitialValues(accessToken).then(data => {
+                console.log("URL", data);
+                setSelectedSubject({ title: data.subjects[0]});
+                setSubjects(data.subjects.map((subject: string) => ({ title: subject })));
+                setStudentClasses(data.classes.map((map: string) => ({ title: map })));
+                setModules(data.modules);
+    
+            }).catch(error => {
+                toast.error("Unable to fetch data", {position: toast.POSITION.TOP_RIGHT, autoClose: false })
+            });
+        }
+        
         //eslint-disable-next-line
-    }, [])
+    }, [accessToken])
 
     useEffect(() => {
         console.log('selectedCodeDuration', selectedCodeDuration);
@@ -50,8 +63,8 @@ export const RegisterAttendance = () => {
 
     // When a subject is selected we will need to fetch the student classes related to the selected subject
     useEffect(() => {
-        if (selectedSubject !== null)
-            getStudentClasses(selectedSubject.title).then(classes => 
+        if (selectedSubject !== null && accessToken)
+            getStudentClasses(accessToken, selectedSubject.title).then(classes => 
                 setStudentClasses(classes.map((_class: string) => ({ title: _class }))
             )).catch(error => {
                 toast.error("Unable to fetch data", {position: toast.POSITION.TOP_RIGHT, autoClose: false })
@@ -117,10 +130,11 @@ export const RegisterAttendance = () => {
 
     const handleLastStep = (isLastStep: boolean) => {
         console.log("handleLastStep", isLastStep)
-        if (isLastStep && selectedSubject && selectedStudentClasses.length >= 1 && selectedModules.length >= 1) {
+        if (isLastStep && accessToken && selectedSubject && selectedStudentClasses.length >= 1 && selectedModules.length >= 1) {
             const newAttendanceCodeDuration: IAttendanceCodeDuration = { durationMinutes: selectedCodeDuration, timeStamp: new Date() }
 
             sendRegisterAttendanceInfo(
+                accessToken,
                 selectedSubject,
                 selectedStudentClasses,
                 selectedModules,

@@ -14,7 +14,7 @@ export interface IRegisterAttendanceStudentDTO {
 }
 
 
-export const sendRegisterAttendanceStudentInfo = async (coordinates: ICoordinates, attendanceCode: string) => {
+export const sendRegisterAttendanceStudentInfo = async (accessToken: string, coordinates: ICoordinates, attendanceCode: string) => {
 
     let url = new URL(REQUEST_CODE_ROUTE);
 
