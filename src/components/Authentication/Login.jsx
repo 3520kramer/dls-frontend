@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useOktaAuth } from '@okta/okta-react';
 import * as OktaSignIn from '@okta/okta-signin-widget';
 import '@okta/okta-signin-widget/dist/css/okta-sign-in.min.css';
+import './Login.css'
 
 import config from './config';
 
@@ -24,7 +25,7 @@ const Login = () => {
       baseUrl: issuer.split('/oauth2')[0],
       clientId,
       redirectUri,
-      logo: '/react.svg',
+      logo: window.location.origin + '/logo.png',
       i18n: {
         en: {
           'primaryauth.title': 'Sign in to React & Company',
