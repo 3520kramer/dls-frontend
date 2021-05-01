@@ -14,7 +14,7 @@ export const fetchUserData = async (accessToken: string, subjectsSelected: Array
     const studentsUrl = `${ROOT_URL}/api/statistics?${subjectQueryArray.toString()}&${classQueryArray.toString()}`;
     const response = await fetch(studentsUrl, {
         method: 'GET',
-        headers: requestHeader(accessToken, 'GET')
+        headers: requestHeader('GET', accessToken)
         }).then((async res => {
             const data = await res.json();
             return data;

@@ -71,8 +71,8 @@ const RegisterAttendanceStudent = () => {
 
     // function for handling the data getting send to the service layer
     const handleSendCode = () => {
-        if(attendanceCode){
-            sendRegisterAttendanceStudentInfo(attendanceCode, location, attendanceCode).then((data) => {
+        if(accessToken){
+            sendRegisterAttendanceStudentInfo(accessToken, location, attendanceCode).then((data) => {
                 toast.info(data, { position: toast.POSITION.TOP_RIGHT, autoClose: false });
 
             }).catch(error => toast.warn(error, { position: toast.POSITION.TOP_RIGHT, autoClose: false }))

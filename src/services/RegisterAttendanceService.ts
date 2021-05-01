@@ -1,8 +1,6 @@
 import { ICoordinates } from "../components/Teacher/RegisterAttendance/Geo/Geo";
 import { CLASSES_ROUTE, INITIAL_INFO_ROUTE, requestHeader, REQUEST_CODE_ROUTE } from "../api-endpoints/endpoints";
 
-const TEACHERID: string = "606df774ed3b07d2f921be10"; 
-
 export interface  IStudentClass{
     id?: number,
     title: string,
@@ -16,7 +14,6 @@ export interface IStudent {
 export const getStudentClasses = async (accessToken: string, subject: string) => {
     let url = new URL(CLASSES_ROUTE);
 
-    url.searchParams.append("teacherid", TEACHERID.toString())
     url.searchParams.append("subject", subject.toString())
     
     let response = await fetch(url.href, { method: "GET", headers: requestHeader("GET", accessToken) });
@@ -43,9 +40,7 @@ export interface IAttendanceCodeDuration{
     timeStamp: Date
 }
 
-
 export interface IRegisterAttendanceDTO{
-    teacherId: string,
     subject: string,//ISubject,
     classes: string[],//IStudentClass[],
     modules: IModule[],
@@ -73,11 +68,10 @@ export const sendRegisterAttendanceInfo = async (accessToken: string, subject: I
 
     // Creating the body
     let registerAttendanceDTO: IRegisterAttendanceDTO = {
-        teacherId: TEACHERID,
         subject: subjectDTO,
         classes: classesDTO,
         modules: selectedModules,
-        coordinates: coordinates.accuracy === 0 && coordinates.latitude === 0 ? null : coordinatesDTO,
+        coordinates: coordinates.accuracy === 100 && coordinates.latitude === 0 ? null : coordinatesDTO,
         numberOfStudents: coordinates.accuracy !== 0 && coordinates.latitude !== 0 ? 0 : numberOfStudents,
         duration: durationDTO
     }
@@ -101,8 +95,6 @@ export interface IAttendanceCode{
 
 export const getInitialValues = async (accessToken: string) => {
     let url = new URL(INITIAL_INFO_ROUTE);
-
-    url.searchParams.append("teacherid", TEACHERID.toString());
     
     const response = await fetch(url.href, { method: "GET", headers: requestHeader("GET", accessToken) });
 
