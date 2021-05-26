@@ -10,15 +10,12 @@ import { Module } from '../../../../redux/RegisterAttendance/RegisterAttendanceT
 
 interface IProps{
     children?: React.ReactNode,
-    onSubjectsChange: Function,
-    onClassesChange: Function,
-    onModulesChange: Function,
     subjects: ISubject[],
     studentClasses: IStudentClass[],
     modules: IModule[]
 };
 
-const SubjectsAndClasses: React.FC<IProps> = ({children, onSubjectsChange, onClassesChange, onModulesChange, subjects, studentClasses, modules}) => {
+const SubjectsAndClasses: React.FC<IProps> = ({children, subjects, studentClasses, modules}) => {
     const dispatch = useDispatch();
     
     const { selectedModules } = useSelector((state: AppState) => state.registerAttendance);

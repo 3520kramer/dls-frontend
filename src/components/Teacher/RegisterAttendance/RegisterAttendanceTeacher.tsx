@@ -137,9 +137,6 @@ const RegisterAttendanceTeacher = () => {
     }
 
     const handleHasReset = () => {
-        setSelectedSubject(null);
-        setSelectedStudentClasses([]);
-        setSelectedModules([]);
         setCodeDuration(5);
         setSelectedNumberOfStudents(1)
         setSelectedLocation({ latitude: 0, longitude: 0, accuracy: 100 })
@@ -164,9 +161,6 @@ const RegisterAttendanceTeacher = () => {
                             subjects={subjects}
                             studentClasses={studentClasses}
                             modules={modules}
-                            onSubjectsChange={(index: number) => handleSubjectChange(index)}
-                            onClassesChange={(indexes: number[]) => handleStudentClassesChange(indexes)}
-                            onModulesChange={(indexes: number[]) => handleModulesChange(indexes)}
                         />
                 }
                 GenerateCode={attendanceCode !== null && <GenerateCode attendanceCode={attendanceCode} />}
