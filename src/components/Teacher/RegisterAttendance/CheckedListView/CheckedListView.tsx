@@ -5,7 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Paper } from '@material-ui/core';
 import { IModule, ISubject, IStudentClass, IStudent } from '../../../../services/RegisterAttendanceService';
-import useStyles from './CheckedListViewStyles'; 
+import useStyles from './CheckedListViewStyles';
 
 interface IProps{
     children?: React.ReactNode[],

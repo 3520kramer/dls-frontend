@@ -5,7 +5,12 @@ import {
   } from './NumberTypes';
   
   const initialStateGetPosts: IncreaseNumberStateType = {
-    chosenNumber: 0
+    chosenNumber: 0,
+    example: {
+      chosenNumber1: 1,
+      chosenNumber2: 2,
+      chosenNumber3: 3
+    }
   };
   
   export const chosenNumberReducer = (

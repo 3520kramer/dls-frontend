@@ -87,17 +87,6 @@ const RegisterAttendanceTeacher = () => {
         console.log('attendanceCode', attendanceCode);
     }, [attendanceCode])
 
-    // Sets the state of the selected subject by the index from the list component
-    const handleSubjectChange = (index: number) => {
-        setSelectedSubject(subjects[index]);
-    }
-
-    const handleStudentClassesChange = (indexes: number[]) => {
-        // Uses map to iterate the indexes and get the chosen studentClasses
-        let classes = indexes.map(index => studentClasses[index])
-        setSelectedStudentClasses(classes)
-    }
-
     // get the locations data from Geo
     const handleLocationChange = (coordinates: ICoordinates) => {
         setSelectedLocation(coordinates);
@@ -114,12 +103,6 @@ const RegisterAttendanceTeacher = () => {
     const handleCodeDurationChange = (value: number) => {
         setCodeDuration(value);
         console.log("handleCodeDurationChange", value);
-    }
-
-    const handleModulesChange = (indexes: number[]) => {
-        // Uses map to iterate the indexes and get the chosen modules
-        let chosenModules = indexes.map(index => modules[index])
-        setSelectedModules(chosenModules);
     }
 
     // if any of the values are null or empty then the registration is not complete, 
