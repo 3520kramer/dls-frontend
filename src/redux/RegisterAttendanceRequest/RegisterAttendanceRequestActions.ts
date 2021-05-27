@@ -1,53 +1,76 @@
-import { 
+import {
   SET_SELECTED_SUBJECT,
   SET_SELECTED_STUDENT_CLASSES,
-  SET_SELECTED_MODULES, 
-  SET_SELECTED_CODE_DURATION, 
-  SET_SELECTED_NUMBER_OF_STUDENTS, 
+  SET_SELECTED_MODULES,
+  SET_SELECTED_CODE_DURATION,
+  SET_SELECTED_NUMBER_OF_STUDENTS,
   SET_SELECTED_LOCATION,
   SetSelectedSubjectActionTypes,
   SetSelectedStudentClassesActionTypes,
-  SetSelectedModulesActionTypes, 
-  IModule } from './RegisterAttendanceRequestTypes';
+  SetSelectedModulesActionTypes,
+  SetSelectedCodeDurationActionTypes,
+  SetSelectedNumberOfStudentActionTypes,
+  SetSelectedLocationActionTypes,
+  INumberOfStudents,
+  ICoordinates,
+  ISelectedCodeDuration,
+} from "./RegisterAttendanceRequestTypes";
+import {
+  ISubject,
+  IStudentClass,
+  IModule,
+} from "../RegisterAttendanceData/RegisterAttendanceDataTypes";
 
-export const setSelectedSubject = (selectedSubject: string): SetSelectedSubjectActionTypes => {
+export const setSelectedSubject = (
+  selectedSubject: ISubject
+): SetSelectedSubjectActionTypes => {
   return {
     type: SET_SELECTED_SUBJECT,
-    payload: selectedSubject
+    payload: selectedSubject,
   };
 };
 
-export const setSelectedStudentClasses = (selectedClasses: string[]): SetSelectedStudentClassesActionTypes => {
+export const setSelectedStudentClasses = (
+  selectedClasses: IStudentClass[]
+): SetSelectedStudentClassesActionTypes => {
   return {
     type: SET_SELECTED_STUDENT_CLASSES,
-    payload: selectedClasses
+    payload: selectedClasses,
   };
 };
 
-export const setSelectedModules = (selectedModules: IModule[]): SetSelectedModulesActionTypes => {
+export const setSelectedModules = (
+  selectedModules: IModule[]
+): SetSelectedModulesActionTypes => {
   return {
     type: SET_SELECTED_MODULES,
-    payload: selectedModules
+    payload: selectedModules,
   };
 };
 
-// export const setSelectedCodeDuration = (value: number): IncreaseNumberActionTypes => {
-//   return {
-//     type: INCREASE_NUMBER,
-//     payload: value
-//   };
-// };
+export const setSelectedCodeDuration = (
+  value: ISelectedCodeDuration
+): SetSelectedCodeDurationActionTypes => {
+  return {
+    type: SET_SELECTED_CODE_DURATION,
+    payload: value,
+  };
+};
 
-// export const setSelectedNumberOfStudents = (value: number): IncreaseNumberActionTypes => {
-//   return {
-//     type: INCREASE_NUMBER,
-//     payload: value
-//   };
-// };
+export const setSelectedNumberOfStudents = (
+  value: INumberOfStudents
+): SetSelectedNumberOfStudentActionTypes => {
+  return {
+    type: SET_SELECTED_NUMBER_OF_STUDENTS,
+    payload: value,
+  };
+};
 
-// export const setSelectedLocation = (value: number): IncreaseNumberActionTypes => {
-//   return {
-//     type: INCREASE_NUMBER,
-//     payload: value
-//   };
-// };
+export const setSelectedLocation = (
+  value: ICoordinates
+): SetSelectedLocationActionTypes => {
+  return {
+    type: SET_SELECTED_LOCATION,
+    payload: value,
+  };
+};
