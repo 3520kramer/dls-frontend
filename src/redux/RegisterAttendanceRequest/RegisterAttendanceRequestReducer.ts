@@ -9,7 +9,7 @@ import {
   SetSelectedStudentClassesActionTypes,
   SetSelectedModulesActionTypes,
   RegisterAttendanceStateType,
-} from "./RegisterAttendanceTypes";
+} from "./RegisterAttendanceRequestTypes";
 
 const initialStateGetPosts: RegisterAttendanceStateType = {
   selectedSubject: {},

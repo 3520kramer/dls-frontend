@@ -1,6 +1,6 @@
-import { getPostsAction } from './PostActions';
+import { getPostsAction } from './RegisterAttendanceDataActions';
 import { Dispatch } from 'redux';
-import { PostActionTypes } from './PostTypes';
+import { PostActionTypes } from './RegisterAttendanceDataTypes';
 
 export const getPosts = () => {
   return function (dispatch: Dispatch<PostActionTypes>) {
@@ -15,9 +15,3 @@ export const getPosts = () => {
       });
   };
 };
-
-
-/*
-* Look into if it should be set or get in action types
-*
-*/

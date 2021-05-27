@@ -8,7 +8,7 @@ import {
   SetSelectedSubjectActionTypes,
   SetSelectedStudentClassesActionTypes,
   SetSelectedModulesActionTypes, 
-  Module } from './RegisterAttendanceTypes';
+  Module } from './RegisterAttendanceRequestTypes';
 
 export const setSelectedSubject = (selectedSubject: string): SetSelectedSubjectActionTypes => {
   return {

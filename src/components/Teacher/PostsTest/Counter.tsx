@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { increaseNumber } from '../../../redux/Number/NumberEffect';
 import { AppState } from '../../../redux/store';
-import { setSelectedModules } from '../../../redux/RegisterAttendance/RegisterAttendanceActions'
+import { setSelectedModules } from '../../../redux/RegisterAttendanceRequest/RegisterAttendanceRequestActions'
 
 const Counter: React.FC = () => {
     const dispatch = useDispatch();

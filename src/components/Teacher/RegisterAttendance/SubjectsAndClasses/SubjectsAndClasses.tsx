@@ -5,8 +5,8 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { ISubject, IModule, IStudentClass } from '../../../../services/RegisterAttendanceService';
 import CheckedListView from '../CheckedListView/CheckedListView';
 import ListView from '../ListView/ListView';
-import { setSelectedSubject, setSelectedStudentClasses, setSelectedModules } from '../../../../redux/RegisterAttendance/RegisterAttendanceActions';
-import { Module } from '../../../../redux/RegisterAttendance/RegisterAttendanceTypes';
+import { setSelectedSubject, setSelectedStudentClasses, setSelectedModules } from '../../../../redux/RegisterAttendanceRequest/RegisterAttendanceRequestActions';
+import { Module } from '../../../../redux/RegisterAttendanceRequest/RegisterAttendanceRequestTypes';
 
 interface IProps{
     children?: React.ReactNode,
