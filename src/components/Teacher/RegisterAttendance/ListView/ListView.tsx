@@ -3,7 +3,7 @@ import List from '@material-ui/core/List';
 import { ListItem, useStyles } from "./ListViewStyles";
 import ListItemText from '@material-ui/core/ListItemText';
 import { Paper } from '@material-ui/core';
-import { ISubject } from '../../../../services/RegisterAttendanceService';
+import { ISubject } from '../../../../redux/RegisterAttendanceData/RegisterAttendanceDataTypes';
 
 interface IProps{
     children?: React.ReactNode[],
@@ -34,7 +34,7 @@ const ListView: React.FC<IProps> = ({children, listData, onChange}) => {
               selected={selectedIndex === index}
               onClick={() => handleListItemClick(index)}
             >
-              <ListItemText primary={item.title}/>
+              <ListItemText primary={item}/>
             </ListItem>
             )
           }

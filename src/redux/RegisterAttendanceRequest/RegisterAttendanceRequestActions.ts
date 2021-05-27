@@ -8,7 +8,7 @@ import {
   SetSelectedSubjectActionTypes,
   SetSelectedStudentClassesActionTypes,
   SetSelectedModulesActionTypes, 
-  Module } from './RegisterAttendanceRequestTypes';
+  IModule } from './RegisterAttendanceRequestTypes';
 
 export const setSelectedSubject = (selectedSubject: string): SetSelectedSubjectActionTypes => {
   return {
@@ -24,7 +24,7 @@ export const setSelectedStudentClasses = (selectedClasses: string[]): SetSelecte
   };
 };
 
-export const setSelectedModules = (selectedModules: Module[]): SetSelectedModulesActionTypes => {
+export const setSelectedModules = (selectedModules: IModule[]): SetSelectedModulesActionTypes => {
   return {
     type: SET_SELECTED_MODULES,
     payload: selectedModules

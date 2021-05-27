@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import AttendeeStatistics from './AttendeeStatistics';
-import { IStudentClass, ISubject, IStudent, getInitialValues } from '../../../services/RegisterAttendanceService';
+import { IStudent, getInitialValues } from '../../../services/RegisterAttendanceService';
+import { ISubject, IStudentClass } from '../../../redux/RegisterAttendanceData/RegisterAttendanceDataTypes';
 import { fetchUserData } from '../../../services/AttendeeStatisticsService';
 import moment from 'moment';
 import { useOktaAuth } from '@okta/okta-react';

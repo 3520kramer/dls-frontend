@@ -4,9 +4,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Paper } from '@material-ui/core';
-import { IModule, ISubject, IStudentClass, IStudent } from '../../../../services/RegisterAttendanceService';
-import useStyles from './CheckedListViewStyles';
+import { IStudent } from '../../../../services/RegisterAttendanceService';
+import { ISubject, IStudentClass } from '../../../../redux/RegisterAttendanceData/RegisterAttendanceDataTypes';
 
+import useStyles from './CheckedListViewStyles';
+import { IModule } from '../../../../redux/RegisterAttendanceData/RegisterAttendanceDataTypes'
 interface IProps{
     children?: React.ReactNode[],
     listData: IStudentClass[] | IModule[] | ISubject[] | IStudent[],
@@ -66,8 +68,12 @@ const CheckedListView: React.FC<IProps> = ({children, listData, onChange, allowM
     setChecked(newChecked);
   };
 
-  function isModule(item: IModule | IStudentClass): item is IModule {
+  function isModule(item: IModule | IStudentClass | ISubject | IStudent): item is IModule {
     return (item as IModule).timespan !== undefined;
+  }
+
+  function isStudent(item: IModule | IStudentClass | ISubject | IStudent): item is IStudent {
+    return (item as IStudent).title !== undefined;
   }
 
   return (
@@ -75,7 +81,17 @@ const CheckedListView: React.FC<IProps> = ({children, listData, onChange, allowM
         <List component="nav">
           {listData.map((item: IModule | IStudentClass | ISubject | IStudent, index: number) => {
               const labelId = `checkbox-list-label-${index}`;
-              let labelText = isModule(item) ? `${item.timespan.start}-${item.timespan.end}` : item.title;
+
+              let labelText;
+              if(isModule(item)){
+                labelText = `${item.timespan.start}-${item.timespan.end}`
+              }else if(isStudent(item)){
+                labelText = item.title;
+              }else{
+                labelText = item;
+              }
+
+              //const labelText = "flot"
               return (
                 <ListItem key={`listitem-${index}`} role={undefined} dense button onClick={handleToggle(index)}> 
                     <Checkbox

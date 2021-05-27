@@ -1,8 +1,26 @@
-import { GET_POSTS, PostActionTypes, Post } from './RegisterAttendanceDataTypes';
+import {
+  SET_REGISTER_ATTENDANCE_DATA,
+  SET_STUDENT_CLASSES,
+  setRegisterAttendanceDataActionTypes,
+  setStudentsClassesActionTypes,
+  RegisterAttendanceData,
+  IStudentClass
+} from "./RegisterAttendanceDataTypes";
 
-export const getPostsAction = (posts: Post[]): PostActionTypes => {
+export const setRegisterAttendanceData = (
+  registerAttendanceData: RegisterAttendanceData
+): setRegisterAttendanceDataActionTypes => {
   return {
-    type: GET_POSTS,
-    payload: posts
+    type: SET_REGISTER_ATTENDANCE_DATA,
+    payload: registerAttendanceData,
+  };
+};
+
+export const setStudentsClasses = (
+  studentClasses: IStudentClass[]
+): setStudentsClassesActionTypes => {
+  return {
+    type: SET_STUDENT_CLASSES,
+    payload: studentClasses,
   };
 };

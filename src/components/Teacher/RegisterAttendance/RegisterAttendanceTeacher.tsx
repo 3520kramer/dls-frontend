@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { AppState } from '../../../redux/store';
 import VerticalStepper from '../../Common/VerticalStepper/VerticalStepper'
 import SubjectsAndClasses from './SubjectsAndClasses/SubjectsAndClasses';
 import GenerateCode from './GenerateCode/GenerateCode';
 import './RegisterAttendanceTeacher.css'
-import { ISubject, IStudentClass, getStudentClasses, IModule, sendRegisterAttendanceInfo, IAttendanceCodeDuration, IAttendanceCode, getInitialValues } from '../../../services/RegisterAttendanceService';
+import { sendRegisterAttendanceInfo, IAttendanceCodeDuration, IAttendanceCode } from '../../../services/RegisterAttendanceService';
+import { IModule } from '../../../redux/RegisterAttendanceData/RegisterAttendanceDataTypes';
 import Geo, { ICoordinates } from './Geo/Geo';
 import { ToastContainer, toast } from 'react-toastify';
 import { useOktaAuth } from '@okta/okta-react';
+import { getRegisterAttendanceData, getStudentClassesData } from '../../../redux/RegisterAttendanceData/RegisterAttendanceDataEffect'
+import { useDispatch } from 'react-redux';
 
 const RegisterAttendanceTeacher = () => {
-    const [subjects, setSubjects] = useState<ISubject[] | []>([]);
-    const [selectedSubject, setSelectedSubject] = useState<ISubject | null>(null);
-
-    const [studentClasses, setStudentClasses] = useState<IStudentClass[] | []>([]);
-    const [selectedStudentClasses, setSelectedStudentClasses] = useState<IStudentClass[] | []>([]);
-
-    const [modules, setModules] = useState<IModule[] | []>([]);
-    const [selectedModules, setSelectedModules] = useState<IModule[] | []>([]);
+    const { subjects, classes, modules } = useSelector((state: AppState) => state.registerAttendanceData);
+    const { selectedSubject, selectedStudentClasses, selectedModules } = useSelector((state: AppState) => state.registerAttendanceRequest);
 
     const [selectedCodeDuration, setCodeDuration] = useState<number>(5);
     const [selectedNumberOfStudents, setSelectedNumberOfStudents] = useState<number>(1);
     const [hasError, setError] = useState<boolean>(false);
+    const [fetchCount, setFetchCount] = useState<number>(0);
 
     const [selectedLocation, setSelectedLocation] = useState<ICoordinates>({ latitude: 0, longitude: 0, accuracy: 100 });
 
@@ -28,6 +28,7 @@ const RegisterAttendanceTeacher = () => {
 
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const { authState, oktaAuth } = useOktaAuth();
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if(authState.isAuthenticated && authState.accessToken){
@@ -37,17 +38,19 @@ const RegisterAttendanceTeacher = () => {
 
     // When component mounts and authentication has update 
     useEffect(() => {
-        if(accessToken){
-            getInitialValues(accessToken).then(data => {
-                console.log("URL", data);
-                setSelectedSubject({ title: data.subjects[0]});
-                setSubjects(data.subjects.map((subject: string) => ({ title: subject })));
-                setStudentClasses(data.classes.map((map: string) => ({ title: map })));
-                setModules(data.modules);
+        if(accessToken && fetchCount < 1){
+            setFetchCount(fetchCount + 1);
+            dispatch(getRegisterAttendanceData(accessToken));
+            // getInitialValues(accessToken).then(data => {
+            //     console.log("URL", data);
+            //     // setSelectedSubject(data.subjects[0]);
+            //     // setSubjects(data.subjects.map((subject: string) => ({ title: subject })));
+            //     // setStudentClasses(data.classes.map((map: string) => ({ title: map })));
+            //     // setModules(data.modules);
     
-            }).catch(error => {
-                toast.error("Unable to fetch data", {position: toast.POSITION.TOP_RIGHT, autoClose: false })
-            });
+            // }).catch(error => {
+            //     toast.error("Unable to fetch data", {position: toast.POSITION.TOP_RIGHT, autoClose: false })
+            // });
         }
         
         //eslint-disable-next-line
@@ -63,29 +66,21 @@ const RegisterAttendanceTeacher = () => {
 
     // When a subject is selected we will need to fetch the student classes related to the selected subject
     useEffect(() => {
-        if (selectedSubject !== null && accessToken)
-            getStudentClasses(accessToken, selectedSubject.title).then(classes => 
-                setStudentClasses(classes.map((_class: string) => ({ title: _class }))
-            )).catch(error => {
-                toast.error("Unable to fetch data", {position: toast.POSITION.TOP_RIGHT, autoClose: false })
-            });;
+        // After the first fetch, the selectedSubject will be updated with the first item in the subjects list.
+        // When this happens we dont want to fetch the classes as we already have it from the first fetch
+        if (fetchCount === 1 && selectedSubject === subjects[0]) return;
+        
+        if(accessToken) {
+            setFetchCount(fetchCount + 1);
+            dispatch(getStudentClassesData(accessToken, selectedSubject));
+        }
+        
+        // getStudentClasses(accessToken, selectedSubject).then(classes => 
+            //     setStudentClasses(classes.map((_class: string) => ({ title: _class }))
+            // )).catch(error => {
+            //     toast.error("Unable to fetch data", {position: toast.POSITION.TOP_RIGHT, autoClose: false })
+            // });;
     }, [selectedSubject])
-
-    useEffect(() => {
-        console.log('DATA selectedSubject', selectedSubject);
-    }, [selectedSubject])
-
-    useEffect(() => {
-        console.log('DATA selectedClasses', selectedStudentClasses);
-    }, [selectedStudentClasses])
-
-    useEffect(() => {
-        console.log('DATA selectedModules', selectedModules);
-    }, [selectedModules])
-
-    useEffect(() => {
-        console.log('attendanceCode', attendanceCode);
-    }, [attendanceCode])
 
     // get the locations data from Geo
     const handleLocationChange = (coordinates: ICoordinates) => {
@@ -156,13 +151,7 @@ const RegisterAttendanceTeacher = () => {
                 isNextButtonDisabled={hasNotCompletedRegistration() || hasError}
                 onLastStep={handleLastStep}
                 hasReset={handleHasReset}
-                SubjectsAndClasses={ 
-                        <SubjectsAndClasses
-                            subjects={subjects}
-                            studentClasses={studentClasses}
-                            modules={modules}
-                        />
-                }
+                SubjectsAndClasses={ <SubjectsAndClasses/> }
                 GenerateCode={attendanceCode !== null && <GenerateCode attendanceCode={attendanceCode} />}
                 Geo={
                     <Geo

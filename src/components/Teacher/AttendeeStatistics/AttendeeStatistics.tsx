@@ -1,7 +1,8 @@
 import React from 'react';
 import './AttendeeStatistics.css';
 import CheckedListView from '../RegisterAttendance/CheckedListView/CheckedListView';
-import { IStudentClass, ISubject, IStudent } from '../../../services/RegisterAttendanceService';
+import { IStudent } from '../../../services/RegisterAttendanceService';
+import { ISubject, IStudentClass } from '../../../redux/RegisterAttendanceData/RegisterAttendanceDataTypes';
 import GraphLine from './Graph/GraphLine';
 import Overview from './Overview/Overview';
 

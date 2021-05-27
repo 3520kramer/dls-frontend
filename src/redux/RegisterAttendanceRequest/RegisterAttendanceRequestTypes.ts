@@ -5,10 +5,10 @@ export const SET_SELECTED_CODE_DURATION = 'SET_SELECTED_CODE_DURATION';
 export const SET_SELECTED_NUMBER_OF_STUDENTS = 'SET_SELECTED_NUMBER_OF_STUDENTS';
 export const SET_SELECTED_LOCATION = 'SET_SELECTED_LOCATION';
 
-export interface RegisterAttendanceStateType {
-  selectedSubject: {}
+export interface RegisterAttendanceRequestStateType {
+  selectedSubject: string
   selectedStudentClasses: string[]
-  selectedModules: Module[];
+  selectedModules: IModule[];
 }
 
 interface SetSelectedSubjectActionType {
@@ -21,10 +21,10 @@ interface SetSelectedStudentClassesActionType {
 }
 interface SetSelectedModulesActionType {
   type: typeof SET_SELECTED_MODULES;
-  payload: Module[];
+  payload: IModule[];
 }
 
-export interface Module{
+export interface IModule{
   id: string,
   timespan: {
     start: string,

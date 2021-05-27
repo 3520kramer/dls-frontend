@@ -2,28 +2,28 @@ import {
   SET_SELECTED_SUBJECT,
   SET_SELECTED_STUDENT_CLASSES,
   SET_SELECTED_MODULES,
-  SET_SELECTED_CODE_DURATION,
-  SET_SELECTED_NUMBER_OF_STUDENTS,
-  SET_SELECTED_LOCATION,
+  // SET_SELECTED_CODE_DURATION,
+  // SET_SELECTED_NUMBER_OF_STUDENTS,
+  // SET_SELECTED_LOCATION,
   SetSelectedSubjectActionTypes,
   SetSelectedStudentClassesActionTypes,
   SetSelectedModulesActionTypes,
-  RegisterAttendanceStateType,
+  RegisterAttendanceRequestStateType,
 } from "./RegisterAttendanceRequestTypes";
 
-const initialStateGetPosts: RegisterAttendanceStateType = {
-  selectedSubject: {},
+const initialStateGetPosts: RegisterAttendanceRequestStateType = {
+  selectedSubject: "",
   selectedStudentClasses: [],
   selectedModules: [],
 };
 
-export const registerAttendanceReducer = (
+export const RegisterAttendanceRequestReducer = (
   state = initialStateGetPosts,
   action:
     | SetSelectedSubjectActionTypes
     | SetSelectedStudentClassesActionTypes
     | SetSelectedModulesActionTypes
-): RegisterAttendanceStateType => {
+): RegisterAttendanceRequestStateType => {
   switch (action.type) {
     case SET_SELECTED_SUBJECT:
       return {

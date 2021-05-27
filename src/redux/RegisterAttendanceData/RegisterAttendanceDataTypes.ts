@@ -1,22 +1,33 @@
-export const GET_POSTS = 'GET_POSTS';
-export const SET_SUBJECTS = 'SET_SUBJECTS';
-export const SET_STUDENT_CLASSES = 'SET_SELECTED_STUDENT_CLASSES';
-export const SET_SELECTED_MODULES = 'SET_SELECTED_MODULES';
+export const SET_REGISTER_ATTENDANCE_DATA = 'SET_REGISTER_ATTENDANCE_DATA';
+export const SET_STUDENT_CLASSES = 'SET_STUDENT_CLASSES';
 
-export interface GetPostsStateType {
-  posts: Post[];
+interface setRegisterAttendanceDataActionType {
+  type: typeof SET_REGISTER_ATTENDANCE_DATA;
+  payload: RegisterAttendanceData;
 }
 
-interface GetPostsActionType {
-  type: typeof GET_POSTS;
-  payload: Post[];
+interface setStudentsClassesActionType {
+  type: typeof SET_STUDENT_CLASSES;
+  payload: IStudentClass[];
 }
 
-export interface Post {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
+export interface RegisterAttendanceDataStateType {
+  subjects: string[]
+  classes: string[]
+  modules: IModule[]
+}
+export interface IModule{
+  id: string,
+  timespan: {
+    start: string,
+    end: string
+  }
 }
 
-export type PostActionTypes = GetPostsActionType;
+export type ISubject = string;
+export type IStudentClass = string;
+
+export type RegisterAttendanceData = RegisterAttendanceDataStateType;
+
+export type setStudentsClassesActionTypes = setStudentsClassesActionType;
+export type setRegisterAttendanceDataActionTypes = setRegisterAttendanceDataActionType;

@@ -1,17 +1,8 @@
 import { ICoordinates } from "../components/Teacher/RegisterAttendance/Geo/Geo";
 import { CLASSES_ROUTE, INITIAL_INFO_ROUTE, requestHeader, REQUEST_CODE_ROUTE } from "../api-endpoints/endpoints";
+import { IModule, ISubject, IStudentClass } from "../redux/RegisterAttendanceData/RegisterAttendanceDataTypes"
 
-export interface  IStudentClass{
-    id?: number,
-    title: string,
-}
-
-export interface IStudent {
-    id: number,
-    title: string
-}
-
-export const getStudentClasses = async (accessToken: string, subject: string) => {
+export const getStudentClasses = async (accessToken: string, subject: ISubject) => {
     let url = new URL(CLASSES_ROUTE);
 
     url.searchParams.append("subject", subject.toString())
@@ -21,19 +12,10 @@ export const getStudentClasses = async (accessToken: string, subject: string) =>
     return await response.json();
 }
 
-export interface ISubject{
-    id?: number,
+export interface IStudent {
+    id: number,
     title: string
 }
-
-export interface IModule{
-    id: number,
-    timespan: {
-        start: string,
-        end: string
-    }
-}
-
 
 export interface IAttendanceCodeDuration{
     durationMinutes: number,
@@ -55,8 +37,8 @@ export const sendRegisterAttendanceInfo = async (accessToken: string, subject: I
     let url = new URL(REQUEST_CODE_ROUTE);
 
     // Mapping to DTO for the body of the request
-    const subjectDTO = subject.title;
-    const classesDTO = classes.map((_class: IStudentClass) => _class.title);
+    const subjectDTO = subject;
+    const classesDTO = classes.map((_class: IStudentClass) => _class);
     const durationDTO = { 
         minutes: attendanceCodeDuration.durationMinutes, 
         timeStamp: attendanceCodeDuration.timeStamp.toISOString()
