@@ -4,7 +4,6 @@ import './Teacherstyles.css'
 import RegisterAttendanceTeacher from './RegisterAttendance/RegisterAttendanceTeacher'
 import AttendeeStatisticsController from './AttendeeStatistics/AttendeeStatistics.controller';
 import { useOktaAuth } from '@okta/okta-react';
-import Posts from './PostsTest/Posts';
 
 interface IProbs{
     activeCodesCallback: Function;
