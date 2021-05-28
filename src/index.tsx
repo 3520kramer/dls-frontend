@@ -7,13 +7,17 @@ import { BrowserRouter} from 'react-router-dom';
 import App from './components/App/App';
 // import './polyfills';
 import 'semantic-ui-css/semantic.min.css';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 
 /* eslint-disable react/jsx-filename-extension */
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
-            <App />
+            <Provider store={store}>
+                <App />
+            </Provider>  
         </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')

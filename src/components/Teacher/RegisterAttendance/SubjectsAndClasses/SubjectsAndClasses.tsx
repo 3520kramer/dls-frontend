@@ -1,20 +1,41 @@
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppState } from '../../../../redux/store';
 import { Col, Container, Row } from 'react-bootstrap';
-import { ISubject, IModule, IStudentClass } from '../../../../services/RegisterAttendanceService';
 import CheckedListView from '../CheckedListView/CheckedListView';
 import ListView from '../ListView/ListView';
+import { setSelectedSubject, setSelectedStudentClasses, setSelectedModules } from '../../../../redux/RegisterAttendanceRequest/RegisterAttendanceRequestActions';
+import { ISubject, IModule, IStudentClass } from '../../../../redux/RegisterAttendanceData/RegisterAttendanceDataTypes';
 
 interface IProps{
     children?: React.ReactNode,
-    onSubjectsChange: Function,
-    onClassesChange: Function,
-    onModulesChange: Function,
-    subjects: ISubject[],
-    studentClasses: IStudentClass[],
-    modules: IModule[]
+    subjects?: ISubject[],
+    studentClasses?: IStudentClass[],
+    modules?: IModule[]
 };
 
-const SubjectsAndClasses: React.FC<IProps> = ({children, onSubjectsChange, onClassesChange, onModulesChange, subjects, studentClasses, modules}) => {
+const SubjectsAndClasses: React.FC<IProps> = ({children}) => {
+    const dispatch = useDispatch();
+    
+    const { subjects, classes, modules } = useSelector((state: AppState) => state.registerAttendanceData);
+
+    // Sets the state of the selected subject by the index from the list component
+    const handleSubjectChange = (index: number) => {
+        dispatch(setSelectedSubject(subjects[index] as unknown as string));
+    }
+
+    const handleStudentClassesChange = (indexes: number[]) => {
+        // Uses map to iterate the indexes and get the chosen studentClasses
+        const studentClasses = indexes.map(index => classes[index]) as unknown as string[]
+        dispatch(setSelectedStudentClasses(studentClasses));
+    }
+
+    const handleModulesChange = (indexes: number[]) => {
+        // Uses map to iterate the indexes and get the chosen modules
+        const chosenModules = indexes.map(index => modules[index]) as unknown as IModule[]
+        dispatch(setSelectedModules(chosenModules));
+    }
+
     return (
         <Container>
             <Row>
@@ -32,22 +53,23 @@ const SubjectsAndClasses: React.FC<IProps> = ({children, onSubjectsChange, onCla
                 <Col className="d-flex justify-content-center">
                     { /* Subjects */ }
                     <ListView
-                        listData={subjects}
-                        onChange={onSubjectsChange}
+                        listData={subjects as unknown as ISubject[]}
+                        onChange={handleSubjectChange}
                     />
                 </Col>
                 <Col className="d-flex justify-content-center">
                     { /* Classes */ }
                     <CheckedListView
-                        listData={studentClasses}
-                        onChange={onClassesChange}
+                        listData={classes as unknown as IStudentClass[]}
+                        onChange={handleStudentClassesChange}
                     /> 
                 </Col>
                 <Col className="d-flex justify-content-center">
                     { /* Modules */ }
+                    
                     <CheckedListView
-                        listData={modules}
-                        onChange={onModulesChange} 
+                        listData={modules as unknown as IModule[]}
+                        onChange={handleModulesChange} 
                         allowMultiToggle
                     /> 
                 </Col>

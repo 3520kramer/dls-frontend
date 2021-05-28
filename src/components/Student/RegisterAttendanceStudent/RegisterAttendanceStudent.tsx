@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import TextField from '../../Common/TextField/TextField'
 import { Container, Col, Row } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { ICoordinates } from '../../Teacher/RegisterAttendance/Geo/Geo';
+import { ICoordinates } from '../../../redux/RegisterAttendanceRequest/RegisterAttendanceRequestTypes';
 import Button from '../../Common/Button/Button';
 import { useStyles } from './RegisterAttendanceStudentStyles';
 import { sendRegisterAttendanceStudentInfo } from '../../../services/RegisterAttendanceStudentService';
@@ -81,7 +81,6 @@ const RegisterAttendanceStudent = () => {
 
     return (
         <Container>
-            <ToastContainer />
             <Row>
                 <Col md={{ span: 6, offset: 3 }}>
                     <div className={classes.root}>
@@ -91,8 +90,8 @@ const RegisterAttendanceStudent = () => {
                             onChange={(value: string) => setAttendanceCode(value.trim())}
                             value={attendanceCode}
                         ></TextField>
-                        <Button onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleSendCode()}>
-                            send code
+                        <Button onClick={() => handleSendCode()}>
+                            Send Code
                     </Button>
                     </div>
                 </Col>
