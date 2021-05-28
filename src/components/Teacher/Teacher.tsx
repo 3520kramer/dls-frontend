@@ -4,7 +4,6 @@ import './Teacherstyles.css'
 import RegisterAttendanceTeacher from './RegisterAttendance/RegisterAttendanceTeacher'
 import AttendeeStatisticsController from './AttendeeStatistics/AttendeeStatistics.controller';
 import { useOktaAuth } from '@okta/okta-react';
-import Posts from './PostsTest/Posts';
 
 interface IProbs{
     activeCodesCallback: Function;
@@ -35,7 +34,6 @@ export const Teacher = (props: IProbs) => {
                 components={[
                     {component: <RegisterAttendanceTeacher/>, label: "Register Student Attendance"}, 
                     {component:  <AttendeeStatisticsController accessToken={accessToken}/>, label: "View Attendee Statistics"},
-                    {component: <Posts/>, label: "TEST"}
                 ]}
                 onTabChange={() => getActiveCodes()}
             />
