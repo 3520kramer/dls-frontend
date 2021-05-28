@@ -35,7 +35,6 @@ export const Teacher = (props: IProbs) => {
                 components={[
                     {component: <RegisterAttendanceTeacher/>, label: "Register Student Attendance"}, 
                     {component:  <AttendeeStatisticsController accessToken={accessToken}/>, label: "View Attendee Statistics"},
-                    {component: <Posts/>, label: "TEST"}
                 ]}
                 onTabChange={() => getActiveCodes()}
             />
