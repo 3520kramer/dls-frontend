@@ -4,10 +4,12 @@ export const fetchUserData = async (accessToken: string, subjectsSelected: Array
 
     let url = new URL(STATISTICS_ROUTE);
 
+    // add the subjects as search params
     subjectsSelected.forEach((subject: any) => {
         url.searchParams.append("subject", subject.title)
     });
-
+    
+    // add the classes as search params
     classesSelected.forEach((oneClass: any) => {
         url.searchParams.append("class", oneClass.title)
     });
