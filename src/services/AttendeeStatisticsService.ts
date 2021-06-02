@@ -1,18 +1,18 @@
-import { ROOT_URL, requestHeader } from "../api-endpoints/endpoints";
+import { STATISTICS_ROUTE, requestHeader } from "../api-endpoints/endpoints";
 
 export const fetchUserData = async (accessToken: string, subjectsSelected: Array<object>, classesSelected: Array<object>) => {
-    const subjectQueryArray = subjectsSelected.map((subject: any) => {
-        const str = subject.title.replaceAll(' ', '%20');
-        return `subject=${str}`;
+
+    let url = new URL(STATISTICS_ROUTE);
+
+    subjectsSelected.forEach((subject: any) => {
+        url.searchParams.append("subject", subject.title)
     });
 
-    const classQueryArray = classesSelected.map((cls: any) => {
-        const str = cls.title.replaceAll(' ', '%20');
-        return `class=${str}`;
+    classesSelected.forEach((oneClass: any) => {
+        url.searchParams.append("class", oneClass.title)
     });
-
-    const studentsUrl = `${ROOT_URL}/api/statistics?${subjectQueryArray.toString()}&${classQueryArray.toString()}`;
-    const response = await fetch(studentsUrl, {
+    
+    const response = await fetch(url.href, {
         method: 'GET',
         headers: requestHeader('GET', accessToken)
         }).then((async res => {
@@ -20,6 +20,5 @@ export const fetchUserData = async (accessToken: string, subjectsSelected: Array
             return data;
         })
     );
-
     return response;
 } 
