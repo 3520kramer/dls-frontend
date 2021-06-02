@@ -36,9 +36,7 @@ function App() {
             <Route path="/login" component={CustomLoginComponent} />
             <SecureRoute exact path="/student" component={Student} />
             <SecureRoute exact path="/"> <Home/> </SecureRoute>
-            {/* <SecureRoute exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)}/> </SecureRoute> */}
-            <Route exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)}/> </Route>
-
+            <SecureRoute exact path="/teacher"> <Teacher activeCodesCallback={(value: number) => setActiveCodes(value)}/> </SecureRoute>
             <Route component={(props: RouteComponentProps) => <PageNotFound {...props}/>}/>
         </Switch>
     </Security>
